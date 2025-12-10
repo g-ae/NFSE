@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --production
+RUN npm install
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 4000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
