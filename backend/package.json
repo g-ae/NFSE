@@ -4,9 +4,16 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "server.js",
+  "type": "module",
+  "main": "src/index.js",
   "scripts": {
+    "start": "POSTGRES_HOST=postgres node src/app.js",
+    "dev": "POSTGRES_HOST=localhost node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "pg": "^8.16.3"
   }
 }
