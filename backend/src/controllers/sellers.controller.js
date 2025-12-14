@@ -1,5 +1,6 @@
 import pool from '../config/db.js'
 
+// /sellers
 const getSellers = async (req, res) => {
     pool.query('SELECT "sellerId", name, telephone, street || \' \' || street_no as "address", state, country FROM seller ORDER BY "sellerId";', (error, results) => {
         if (error) {
@@ -11,6 +12,7 @@ const getSellers = async (req, res) => {
     })
 }
 
+// /sellers/:id
 const getSeller = async (req, res) => {
     const id = parseInt(req.params.id)
 
