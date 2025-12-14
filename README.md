@@ -2,12 +2,7 @@
 
 ## Setting everything up
 ### Database variables
-First of all, you must create a .env file at the root of the project (same as this README file) with the following variables (you can change their content as you like), this example is available in the `.env.example` file :
-```
-POSTGRES_DB=nfse
-POSTGRES_USER=nfseadmin
-POSTGRES_PASSWORD=my-password
-```
+First of all, you must create a .env file at the root of the project (same as this README file) following the same structure as in the example : `.env.example`.
 ### Start containers
 You can setup all the containers with a simple command :
 ```sh
@@ -37,4 +32,17 @@ make reset-hard     # deletes everything and restarts in prod
 make dev            # starts all in development (all ports are open)
 make dev-db         # starts postgres in dev (port 5432 is open)
 make dev-backend    # starts postgres and backend in dev (ports are open)
+```
+## API Schema
+First of all, to use the API correctly, you must use the right IP. If running in prod, you must query `http://backend:4000`. Else, if running in a development container, you must query `http://localhost:4000`.
+```
+GET "/sellers"                  -> returns all sellers from the db
+GET "/sellers/:id"              -> returns data from a specific seller
+
+GET "/bundles"                  -> return all bundles from the db
+GET "/bundles/:id"              -> return data from specific bundle
+POST "/bundles/new"             -> create new bundle with data from JSON body
+
+POST "/account/buyer"           -> login for buyer account (email / password in JSON body as "email" and "password"). password must be SHA-256 encrypted. This will return a token that can be used to rate sellers, buy bundles, etc.
+POST "/account/buyer/register"  -> register a buyer account, all data in JSON body
 ```

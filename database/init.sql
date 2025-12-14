@@ -3,9 +3,9 @@ CREATE TABLE "buyer" (
   "name" varchar(50) NOT NULL,
   "email" varchar(50) NOT NULL,
   "password" varchar(255) NOT NULL,
-  "charity" boolean NOT NULL,
+  "charity" boolean default false,
   "telephone" varchar(20) NOT NULL,
-  "strikeCount" integer NOT NULL,
+  "strikeCount" integer default 0,
   "lastStrikeDate" timestamp
 );
 
