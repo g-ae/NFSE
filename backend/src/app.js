@@ -16,11 +16,13 @@ app.listen(port, () => {
 })
 
 // route implementation
+import buyerRoute from './routes/buyers.route.js'
 import sellerRoute from './routes/sellers.route.js'
 import bundleRoute from './routes/bundles.route.js'
 import accountRoute from './routes/account.route.js'
 
 // routes
+app.use("/buyers", buyerRoute)
 app.use("/sellers", sellerRoute)
 app.use("/bundles", bundleRoute)
 app.use("/account", accountRoute)
