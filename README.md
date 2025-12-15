@@ -41,8 +41,11 @@ GET "/sellers/:id"              -> returns data from a specific seller
 
 GET "/bundles"                  -> return all bundles from the db
 GET "/bundles/:id"              -> return data from specific bundle
-POST "/bundles/new"             -> create new bundle with data from JSON body
+POST "/bundles/new"             -> create new bundle with data from JSON body (needs "authorization: bearer token" header)
 
 POST "/account/buyer"           -> login for buyer account (email / password in JSON body as "email" and "password"). password must be SHA-256 encrypted. This will return a token that can be used to rate sellers, buy bundles, etc.
 POST "/account/buyer/register"  -> register a buyer account, all data in JSON body
+
+POST "/account/seller"          -> login for seller account (email / password in json like buyer login) -> returns a token
+POST "/account/seller/register" -> register a seller account, all data in JSON body, needed data: ["email", "password", "name", "telephone", "country", "state", "npa", "street", "street_no"]
 ```
