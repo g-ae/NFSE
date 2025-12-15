@@ -11,7 +11,7 @@ const sellerLogin = (req, res) => {
     return res.status(400).json({message:"Missing email or password"})
   }
   
-  pool.query('SELECT "buyerId", email, password from buyer WHERE email = $1', [email], (error, results) => {
+  pool.query('SELECT "sellerId", email, password from seller WHERE email = $1', [email], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "db error"})
@@ -26,7 +26,7 @@ const sellerLogin = (req, res) => {
     
     if (bcrypt.compareSync(password, account.password)) {
       // Compte accepté
-      return res.status(200).json({"token": "b/" + results.rows[0].buyerId})
+      return res.status(200).json({"token": "s/" + results.rows[0].sellerId})
     } else {
       // Compte refusé
       return res.status(401).json()
