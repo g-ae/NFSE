@@ -26,7 +26,7 @@ const buyerLogin = (req, res) => {
     
     if (bcrypt.compareSync(password, account.password)) {
       // Compte accepté
-      return res.status(200).json({"token": results.rows[0].buyerId})
+      return res.status(200).json({"token": "b/" + results.rows[0].buyerId})
     } else {
       // Compte refusé
       return res.status(401).json()
@@ -34,7 +34,7 @@ const buyerLogin = (req, res) => {
   })
 }
 
-const buyerRegister = (req, res) => {
+const buyerRegister = async (req, res) => {
   // prendre toutes les infos qu'on me donne dans le body et créer un compte
   // pas de vérification par mail/téléphone pour l'instant car trop compliqué pour ce mini-projet
   // retour d'un web token aussi
@@ -42,7 +42,18 @@ const buyerRegister = (req, res) => {
   const rounds = 10 // this number can be changed later as the number of rounds is available in the hash
   
   const {email, password, name, telephone} = req.body
-  // TODO: add verification that email is only used once
+  
+  var query
+  try {
+    query = await pool.query("SELECT \"buyerId\" from buyer WHERE email = $1", [email])
+  } catch(e) {
+    console.log(e)
+    return res.status(502).json()
+  }
+  
+  if (query.rowCount > 0) {
+    return res.status(400).json({message: "email already in use"})
+  }
   
   if (!email || !password || !name || !telephone) {
     return res.status(400).json({message: "missing arguments"})
