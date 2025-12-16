@@ -1,9 +1,9 @@
 import pool from '../config/db.js'
 
-const SELECT_QUERY = 'SELECT "bundleId", "sellerId", "buyerId", "paymentMethodId", content, "pickupStartTime", "pickupEndTime", reserved, confirmed, price, "pickupRealTime" FROM bundle'
+const SELECT_QUERY = 'SELECT "bundleId", "sellerId", "buyerId", "paymentMethodId", content, "pickupStartTime", "pickupEndTime", "reservedTime", confirmed, price, "pickupRealTime" FROM bundle'
 
 const getBundles = async (req, res) => {
-  pool.query(SELECT_QUERY, (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "reservedTime" is NULL', (error, results) => {
     if (error) {
       console.log("Bundle error =>", error)
       return res.status(502).json({message: "Database error"})
