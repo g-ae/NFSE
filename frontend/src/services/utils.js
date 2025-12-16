@@ -13,6 +13,18 @@ async function sha256(message) {
     return hashHex;
 }
 
+const getAccountTypeFromToken = (token) => {
+  switch (token[0]) {
+    case "b":
+      return "Buyer"
+    case "s":
+      return "Seller"
+    default:
+      return "Unknown"
+  }
+}
+
 export {
-  sha256
+  sha256,
+  getAccountTypeFromToken
 }

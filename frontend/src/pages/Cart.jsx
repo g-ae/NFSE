@@ -1,9 +1,21 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Cart.css";
 import { useBundleContext } from "../context/BundleContext";
 import BundleCard from "../components/BundleCard";
+import { isLoggedIn } from "../services/cookies";
 
 function Cart() {
   const { incart } = useBundleContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  if (!isLoggedIn()) return null;
 
   if (incart.length === 0) {
     return (

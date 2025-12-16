@@ -70,3 +70,29 @@ export const registerSeller = async (query) => {
   if (parseInt(res.status / 100) != 2) return false
   else return true
 }
+
+export const getUser = async (type, id) => {
+  const res = await fetch(`${BASE_URL}/${type}/${id}`)
+  if (parseInt(res.status / 100) != 2) return null
+  else return await res.json()
+}
+
+export const getBuyer = async (id) => {
+  return await getUser("buyers", id)
+}
+
+export const getSeller = async (id) => {
+  return await getUser("sellers", id)
+}
+
+export const getAccountEmail = async (token) => {
+  const id = token.split('/')[1]
+  switch (token[0]) {
+    case "b":
+      return (await getBuyer(id)).email
+    case "s":
+      return (await getSeller(id)).email
+    default:
+      "unknown"
+  }
+}

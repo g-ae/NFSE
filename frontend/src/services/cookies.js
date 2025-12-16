@@ -17,8 +17,13 @@ function clearToken() {
   cookies.remove(TOKEN_NAME)
 }
 
+function getToken() {
+  return cookies.get(TOKEN_NAME)
+}
+
 export {
   isLoggedIn,
   saveToken,
-  clearToken
+  clearToken,
+  getToken
 }
