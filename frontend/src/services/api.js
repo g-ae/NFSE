@@ -1,3 +1,4 @@
+import { getToken } from "./cookies";
 import { sha256 } from "./utils";
 
 const BASE_URL = "http://localhost:4000";
@@ -85,7 +86,11 @@ export const getSeller = async (id) => {
   return await getUser("sellers", id)
 }
 
-export const getAccountEmail = async (token) => {
+export const getAccountEmail = async () => {
+  const token = getToken()
+  
+  if (!token) return null
+  
   const id = token.split('/')[1]
   switch (token[0]) {
     case "b":
@@ -95,4 +100,63 @@ export const getAccountEmail = async (token) => {
     default:
       "unknown"
   }
+}
+
+export const getReservedBundles = async () => {
+  const token = getToken()
+  
+  if (!token) return []
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  
+  const res = await fetch(`${BASE_URL}/bundles/reserved`, {
+    headers: headers
+  })
+  console.log(res)
+  if (parseInt(res.status / 100) != 2) return []
+  
+  return await res.json()
+}
+
+export const reserveBundle = async (bundleId) => {
+  const token = getToken()
+  
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/bundles/reserve`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({
+      id: bundleId
+    })
+  })
+  
+  if (parseInt(res.status / 100) != 2) return false
+  return true
+}
+
+export const unreserveBundle = async (bundleId) => {
+  const token = getToken()
+  
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/bundles/unreserve`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({
+      id: bundleId
+    })
+  })
+  
+  if (parseInt(res.status / 100) != 2) return false
+  return true
 }

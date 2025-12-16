@@ -63,7 +63,7 @@ const newBundle = async (req, res) => {
 }
 
 // /bundles/reserved/
-const getReservedBundle = async (req, res) => {
+const getReservedBundles = async (req, res) => {
   if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
   const bearer = req.headers.authorization
   
@@ -72,13 +72,12 @@ const getReservedBundle = async (req, res) => {
   
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "reservedTime" is not NULL AND "confirmed" = FALSE', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "reservedTime" is not NULL AND "confirmed" = FALSE', [id], (error, results) => {
     if (error) {
       console.log("Bundle ID error => ", error)
       return res.status(502).json({message: "Database error"})
     }
-    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
-    else return res.status(200).json(results.rows[0])
+    return res.status(200).json(results.rows)
   })
 }
 
@@ -92,34 +91,62 @@ const getConfirmedBundle = async (req, res) => {
   
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "confirmed" = TRUE', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "confirmed" = TRUE', [id], (error, results) => {
     if (error) {
       console.log("Bundle ID error => ", error)
       return res.status(502).json({message: "Database error"})
     }
-    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
-    else return res.status(200).json(results.rows[0])
+    return res.status(200).json(results.rows)
   })
 }
 
-// TODO:
 // /bundles/reserve
 const patchReserveBundle = async (req, res) => {
   if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  // authorization
   const bearer = req.headers.authorization
   
   const token = bearer.split(' ')[1]
   if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
   
-  const id = token.split('/')[1]
+  const buyerid = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "reservedTime" is not NULL AND "confirmed" = FALSE', [id], (error, results) => {
+  // body
+  if (!req.body) return res.status(400).json()
+  const { id } = req.body
+  if (!id) return res.status(400).json()
+
+  pool.query('UPDATE bundle SET "reservedTime" = $1, "buyerId" = $2 WHERE "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, id], (error, results) => {
     if (error) {
-      console.log("Bundle ID error => ", error)
+      console.log(error)
       return res.status(502).json({message: "Database error"})
     }
-    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
-    else return res.status(200).json(results.rows[0])
+    return res.status(200).json(results.rows)
+  })
+}
+
+// /bundles/unreserve
+const patchUnreserveBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  // authorization
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const buyerid = token.split('/')[1]
+
+  // body
+  if (!req.body) return res.status(400).json()
+  const { id } = req.body
+  if (!id) return res.status(400).json()
+
+  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "bundleId" = $1', [id], (error, results) => {
+    if (error) {
+      console.log(error)
+      return res.status(502).json({message: "Database error"})
+    }
+    return res.status(200).json(results.rows)
   })
 }
 
@@ -127,6 +154,8 @@ export {
   getBundles,
   getBundle,
   newBundle,
-  getReservedBundle,
-  getConfirmedBundle
+  getReservedBundles,
+  getConfirmedBundle,
+  patchReserveBundle,
+  patchUnreserveBundle
 }

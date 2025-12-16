@@ -1,14 +1,22 @@
 import "../css/BundleCard.css"
-import { useBundleContext } from "../context/BundleContext"
+//import { useBundleContext } from "../context/BundleContext"
+import { reserveBundle, unreserveBundle } from "../services/api"
 
 function BundleCard({bundle}) {
-    const {isReserved, addToCart, removeFromCart} = useBundleContext()
-    const incart = isReserved(bundle.bundleId)
+    //const {isReserved, addToCart, removeFromCart} = useBundleContext()
+    //const incart = isReserved(bundle.bundleId)
 
     const onIncartClick = (e) => {
         e.stopPropagation()
-        if (incart) removeFromCart(bundle.bundleId)
-        else addToCart(bundle)
+        if (!bundle.reservedTime) {
+          reserveBundle(bundle.bundleId)
+          alert("Added item to cart")
+          window.location.href = "/"
+        } else {
+          unreserveBundle(bundle.bundleId)
+          alert("Removed item from cart")
+          window.location.href = "/cart"
+        }
     }
 
     return (
@@ -16,14 +24,14 @@ function BundleCard({bundle}) {
             <div className="bundle-poster">
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
                 <div className="bundle-overlay">
-                    <button className={`cart-btn ${incart ? "active" : ""}`} onClick={onIncartClick}>
+                    <button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
                         🛒
                     </button>
                 </div>
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>
-                <p>{bundle.pickup_start_time} - {bundle.pickup_end_time}</p> {/*.split("-")[0]}*/}
+                <p>{bundle.pickupStartTime} - {bundle.pickupEndTime}</p> {/*.split("-")[0]}*/}
             </div>
         </div>
     )

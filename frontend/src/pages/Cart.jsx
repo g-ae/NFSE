@@ -1,23 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Cart.css";
-import { useBundleContext } from "../context/BundleContext";
 import BundleCard from "../components/BundleCard";
 import { isLoggedIn } from "../services/cookies";
+import { getReservedBundles } from '../services/api.js'
 
 function Cart() {
-  const { incart } = useBundleContext();
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!isLoggedIn()) {
       navigate("/login");
+      return;
     }
+
+    const fetchCart = async () => {
+      try {
+        const bundles = await getReservedBundles();
+        setCartItems(bundles || []);
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCart();
   }, [navigate]);
 
   if (!isLoggedIn()) return null;
+  
+  if (loading) {
+    return <div className="cart-loading"><h2>Loading cart...</h2></div>;
+  }
 
-  if (incart.length === 0) {
+  if (cartItems.length === 0) {
     return (
     <div className="cart-empty">
       <h2>No Bundle in cart yet</h2>
@@ -30,7 +49,7 @@ function Cart() {
       <div className="incart">
         <h2>Your Cart</h2>
         <div className="bundle-grid">
-          {incart.map((bundle) => (
+          {cartItems.map((bundle) => (
             <BundleCard bundle={bundle} key={bundle.bundleId} />
           ))}
         </div>
