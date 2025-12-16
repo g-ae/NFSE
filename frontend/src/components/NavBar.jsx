@@ -15,8 +15,7 @@ function UserSection() {
       
       try {
         const accountType = getAccountTypeFromToken(token);
-        // Passing token as id as well, assuming token acts as ID
-        const accountEmail = await getAccountEmail(token, token);
+        const accountEmail = await getAccountEmail(token);
         setUserInfo(`${accountType}: ${accountEmail}`);
       } catch (err) {
         console.error(err);
