@@ -30,7 +30,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "3000:3000" # frontend accessible depuis le navigateur
+      - "5173:3000" # frontend accessible depuis le navigateur
     networks:
       - nfse-network
     

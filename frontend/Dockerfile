@@ -11,7 +11,7 @@ COPY . .
 RUN npm start
 
 # On expose le port 3000 (celui défini dans server.js)
-EXPOSE 3000
+EXPOSE 5173
 
 # Au démarrage, on lance notre serveur Node proxy
-CMD ["node", "server.js"]
+CMD ["npm", "run", "dev"]

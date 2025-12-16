@@ -1,4 +1,4 @@
-import e, { Router } from 'express'
+import { Router } from 'express'
 import { buyerLogin, buyerRegister } from '../controllers/account_buyer.controller.js'
 import { sellerLogin, sellerRegister } from '../controllers/account_seller.controller.js'
 

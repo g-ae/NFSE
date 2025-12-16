@@ -62,8 +62,71 @@ const newBundle = async (req, res) => {
   })
 }
 
+// /bundles/reserved/
+const getReservedBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const id = token.split('/')[1]
+
+  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "reservedTime" is not NULL AND "confirmed" = FALSE', [id], (error, results) => {
+    if (error) {
+      console.log("Bundle ID error => ", error)
+      return res.status(502).json({message: "Database error"})
+    }
+    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
+    else return res.status(200).json(results.rows[0])
+  })
+}
+
+// /bundles/confirmed/
+const getConfirmedBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const id = token.split('/')[1]
+
+  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "confirmed" = TRUE', [id], (error, results) => {
+    if (error) {
+      console.log("Bundle ID error => ", error)
+      return res.status(502).json({message: "Database error"})
+    }
+    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
+    else return res.status(200).json(results.rows[0])
+  })
+}
+
+// TODO:
+// /bundles/reserve
+const patchReserveBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const id = token.split('/')[1]
+
+  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1 AND "reservedTime" is not NULL AND "confirmed" = FALSE', [id], (error, results) => {
+    if (error) {
+      console.log("Bundle ID error => ", error)
+      return res.status(502).json({message: "Database error"})
+    }
+    if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
+    else return res.status(200).json(results.rows[0])
+  })
+}
+
 export {
   getBundles,
   getBundle,
-  newBundle
+  newBundle,
+  getReservedBundle,
+  getConfirmedBundle
 }

@@ -64,9 +64,9 @@ function Home() {
         <div className="loading">Loading...</div>
       ) : (
         <div className="bundle-grid">
-          {bundles.map((bundle) => (
-            <BundleCard bundle={bundle} key={bundle.bundleId} />
-          ))}
+            {(bundles.length == 0) ? "No bundles available" : bundles.map((bundle) => (
+              <BundleCard bundle={bundle} key={bundle.bundleId} />
+            ))}
         </div>
       )}
     </div>

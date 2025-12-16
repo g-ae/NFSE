@@ -52,7 +52,7 @@ CREATE TABLE "bundle" (
   "content" text NOT NULL,
   "pickupStartTime" timestamp NOT NULL,
   "pickupEndTime" timestamp NOT NULL,
-  "reserved" boolean default false,
+  "reservedTime" timestamp,
   "confirmed" boolean default false,
   "price" decimal(10,2) NOT NULL,
   "pickupRealTime" timestamp

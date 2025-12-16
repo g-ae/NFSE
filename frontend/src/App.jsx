@@ -1,6 +1,10 @@
 import "./css/App.css";
 import Cart from "./pages/Cart";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import RegisterBuyer from "./pages/RegisterBuyer";
+import RegisterSeller from "./pages/RegisterSeller";
 import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
@@ -13,6 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/buyer" element={<RegisterBuyer />} />
+          <Route path="/register/seller" element={<RegisterSeller />} />
         </Routes>
       </main>
     </BundleProvider>
