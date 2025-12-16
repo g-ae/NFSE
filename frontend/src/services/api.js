@@ -5,7 +5,8 @@ export const getPopularBundles = async () => {
   console.log("try")
   const response = await fetch(`${BASE_URL}/bundles`);
   const data = await response.json();
-  return data.results;
+  console.log(data)
+  return data;
 };
 
 export const searchBundles = async (query) => {

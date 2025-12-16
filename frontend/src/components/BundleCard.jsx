@@ -14,7 +14,7 @@ function BundleCard({bundle}) {
     return (
         <div className="bundle-card">
             <div className="bundle-poster">
-                {/*<img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>*/}
+                <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
                 <div className="bundle-overlay">
                     <button className={`cart-btn ${incart ? "active" : ""}`} onClick={onIncartClick}>
                         🛒

@@ -5,7 +5,7 @@ import "../css/Home.css";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [bundle, setBundles] = useState([]);
+  const [bundles, setBundles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -64,8 +64,8 @@ function Home() {
         <div className="loading">Loading...</div>
       ) : (
         <div className="bundle-grid">
-          {bundle.map((bundle) => (
-            <BundleCard movie={bundle} key={bundle.bundleId} />
+          {bundles.map((bundle) => (
+            <BundleCard bundle={bundle} key={bundle.bundleId} />
           ))}
         </div>
       )}
