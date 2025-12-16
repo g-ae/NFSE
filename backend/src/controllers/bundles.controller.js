@@ -1,6 +1,6 @@
 import pool from '../config/db.js'
 
-const SELECT_QUERY = 'SELECT "bundleId", "buyerId", "paymentMethodId", content, "pickupStartTime", reserved, confirmed, price, "pickupRealTime" FROM bundle'
+const SELECT_QUERY = 'SELECT "bundleId", "sellerId", "buyerId", "paymentMethodId", content, "pickupStartTime", "pickupEndTime", reserved, confirmed, price, "pickupRealTime" FROM bundle'
 
 const getBundles = async (req, res) => {
   pool.query(SELECT_QUERY, (error, results) => {
@@ -27,7 +27,43 @@ const getBundle = async (req, res) => {
   })
 }
 
+// /bundles/new
+const newBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "s") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const id = token.split('/')[1]
+
+  const {content, pickupStartTime, pickupEndTime, price} = req.body
+  
+  let pricef
+  try {
+    pricef = parseFloat(price)
+    Date.parse(pickupStartTime)
+    Date.parse(pickupEndTime)
+  } catch(e) {
+    return res.status(400).json({message: "arg type is wrong"})
+  }
+  console.log(typeof pricef, pricef)
+  
+  if (!content || !pickupStartTime || !pickupEndTime || !price) return res.status(400).json({message: "missing data"})
+  
+  pool.query("INSERT INTO bundle(\"sellerId\", \"content\", \"pickupStartTime\", \"pickupEndTime\", price) VALUES($1, $2, $3, $4, $5)", [id, content, pickupStartTime, pickupEndTime, pricef], (error, results) => {
+    if (error) {
+      if (error.code == '23503') return res.status(401).json({message: "authorization is required"})
+      console.log(error)
+      return res.status(502).json({message: "db error"})
+    }
+    
+    return res.status(200).json()
+  })
+}
+
 export {
   getBundles,
-  getBundle
+  getBundle,
+  newBundle
 }
