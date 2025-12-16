@@ -55,7 +55,8 @@ CREATE TABLE "bundle" (
   "reservedTime" timestamp,
   "confirmed" boolean default false,
   "price" decimal(10,2) NOT NULL,
-  "pickupRealTime" timestamp
+  "pickupRealTime" timestamp,
+  "image_url" text
 );
 
 CREATE TABLE "payment_method" (
