@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt'
 const buyerLogin = (req, res) => {
   // check si email + mdp (hashé en SHA256) correspondent à qqn dedans
   // si oui, retourner userId de l'utilisateur qui agit comme token
+  if (!req.body) return res.status(400).json({message: "no body"})
+  
   const { email, password } = req.body
   
   if (!email || !password) {
@@ -22,8 +24,6 @@ const buyerLogin = (req, res) => {
     }
     const account = results.rows[0]
     
-    console.log(account)
-    
     if (bcrypt.compareSync(password, account.password)) {
       // Compte accepté
       return res.status(200).json({"token": "b/" + results.rows[0].buyerId})
@@ -40,6 +40,8 @@ const buyerRegister = async (req, res) => {
   // retour d'un web token aussi
   
   const rounds = 10 // this number can be changed later as the number of rounds is available in the hash
+  
+  if (!req.body) return res.status(400).json({message: "no body"})
   
   const {email, password, name, telephone} = req.body
   
