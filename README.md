@@ -6,7 +6,7 @@ First of all, you must create a .env file at the root of the project (same as th
 ### Start containers
 You can setup all the containers with a simple command :
 ```sh
-docker-compose up -d
+make
 ```
 This will create all necessary containers and will run them all in the background in the correct order. 
 
@@ -24,10 +24,10 @@ docker-compose up -d backend
 
 ### Make commands
 ```sh
-make start          # starts everything in prod
+make                # starts everything in prod
 make stop           # stops all containers
-make delete-hard    # deletes everything
-make reset-hard     # deletes everything and restarts in prod
+make delete         # deletes everything
+make reset          # deletes everything and restarts in prod
 
 make dev            # starts all in development (all ports are open)
 make dev-db         # starts postgres in dev (port 5432 is open)
