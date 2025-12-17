@@ -18,8 +18,8 @@ services:
       context: ./backend/
     depends_on:
       - postgres
-    expose: # port écouté en interne
-      - "4000"
+    ports: # port écouté en interne
+      - "4000:4000"
     env_file: ".env"
     networks:
       - nfse-network
@@ -30,7 +30,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "5173:3000" # frontend accessible depuis le navigateur
+      - "3000:5173" # frontend accessible depuis le navigateur
     networks:
       - nfse-network
     

@@ -1,15 +1,13 @@
 import { getToken } from "./cookies";
 import { sha256 } from "./utils";
 
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "/api";
 const jsonHeaders = new Headers();
 jsonHeaders.append('Content-Type', 'application/json');
 
 export const getPopularBundles = async () => {
-  console.log("try")
   const response = await fetch(`${BASE_URL}/bundles`);
   const data = await response.json();
-  console.log(data)
   return data;
 };
 

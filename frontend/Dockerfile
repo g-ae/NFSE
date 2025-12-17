@@ -8,10 +8,8 @@ RUN npm install
 
 # Copie du code source et build en prod
 COPY . .
-RUN npm start
 
-# On expose le port 3000 (celui défini dans server.js)
 EXPOSE 5173
 
-# Au démarrage, on lance notre serveur Node proxy
-CMD ["npm", "run", "dev"]
+# Au démarrage, on lance notre serveur Node
+CMD ["npm", "run", "start"]
