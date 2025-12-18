@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "VITE_BACKEND_HOST=backend vite",
+    "start": "VITE_BACKEND_HOST=backend vite preview",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

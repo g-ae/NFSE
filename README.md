@@ -11,7 +11,7 @@ make
 This will create all necessary containers and will run them all in the background in the correct order. 
 
 ### You're set
-Your site is available at `localhost:3000`.
+When all containers are built and created, your site will be available at `localhost:3000`.
 
 ## Development
 ### Start only one container

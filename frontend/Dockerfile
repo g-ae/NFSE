@@ -9,7 +9,7 @@ RUN npm install
 # Copie du code source et build en prod
 COPY . .
 
-EXPOSE 5173
+EXPOSE 4173
 
 # Au démarrage, on lance notre serveur Node
 CMD ["npm", "run", "start"]
