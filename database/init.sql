@@ -79,3 +79,12 @@ ALTER TABLE "bundle" ADD CONSTRAINT "seller_bundle" FOREIGN KEY ("sellerId") REF
 ALTER TABLE "bundle" ADD CONSTRAINT "buyer_bundle" FOREIGN KEY ("buyerId") REFERENCES "buyer" ("buyerId");
 
 ALTER TABLE "bundle" ADD CONSTRAINT "bundle_payment_method" FOREIGN KEY ("paymentMethodId") REFERENCES "payment_method" ("paymentMethodId");
+
+INSERT INTO "seller"("name", "email", "password", "country", "state", "npa", "street", "street_no", "telephone")
+  VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'VS', '1950', 'Avenue de la Planta', '50', '+41272928496');
+
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
+  VALUES(1, '3 pains au chocolat', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
+
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
+  VALUES(1, 'Panier Surprise', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 14.50);
