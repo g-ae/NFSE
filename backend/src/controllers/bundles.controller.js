@@ -113,10 +113,10 @@ const patchReserveBundle = async (req, res) => {
 
   // body
   if (!req.body) return res.status(400).json()
-  const { id } = req.body
-  if (!id) return res.status(400).json()
+  const { bundleId } = req.body
+  if (!bundleId) return res.status(400).json()
 
-  pool.query('UPDATE bundle SET "reservedTime" = $1, "buyerId" = $2 WHERE "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, id], (error, results) => {
+  pool.query('UPDATE bundle SET "reservedTime" = $1, "buyerId" = $2 WHERE "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, bundleId], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "Database error"})
@@ -138,10 +138,10 @@ const patchUnreserveBundle = async (req, res) => {
 
   // body
   if (!req.body) return res.status(400).json()
-  const { id } = req.body
-  if (!id) return res.status(400).json()
+  const { bundleId } = req.body
+  if (!bundleId) return res.status(400).json()
 
-  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "bundleId" = $1', [id], (error, results) => {
+  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "bundleId" = $1', [bundleId], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "Database error"})
