@@ -7,6 +7,7 @@ import { getAccountEmail } from '../services/api.js'
 
 function UserSection() {
   const [userInfo, setUserInfo] = useState("Loading...");
+  const [accountType, setAccountType] = useState(null);
 
   useEffect(() => {
     const fetchInfo = async () => {
@@ -14,9 +15,10 @@ function UserSection() {
       if (!token) return;
       
       try {
-        const accountType = getAccountTypeFromToken(token);
+        const type = getAccountTypeFromToken(token);
+        setAccountType(type);
         const accountEmail = await getAccountEmail(token);
-        setUserInfo(`${accountType}: ${accountEmail}`);
+        setUserInfo(`${type}: ${accountEmail}`);
       } catch (err) {
         console.error(err);
         setUserInfo("Error loading info");
@@ -35,10 +37,13 @@ function UserSection() {
   if (isLoggedIn()) {
     return (
       <>
-        <Link to="/cart" className="nav-link">Cart</Link>
-        <a href="#" className="nav-link" onClick={handleLogout}>
-          {userInfo}
-        </a>
+        {accountType === "Seller" ? (
+          <Link to="/new-bundle" className="nav-link">New Bundle</Link>
+        ) : (
+          <Link to="/cart" className="nav-link">Cart</Link>
+        )}
+        <Link to="/profile" className="nav-link">{userInfo}</Link>
+        <a href="#" className="nav-link" onClick={handleLogout}>Logout</a>
       </>
     );
   }

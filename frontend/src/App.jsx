@@ -3,6 +3,7 @@ import Cart from "./pages/Cart";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import NewBundle from "./pages/NewBundle";
 import RegisterBuyer from "./pages/RegisterBuyer";
 import RegisterSeller from "./pages/RegisterSeller";
 import { Routes, Route } from "react-router-dom";
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/new-bundle" element={<NewBundle />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/register/buyer" element={<RegisterBuyer />} />

@@ -99,6 +99,14 @@
 .bundle-info p {
   color: #999;
   font-size: 0.9rem;
+  margin: 0;
+}
+
+.bundle-price {
+  color: #ff4757 !important;
+  font-weight: bold;
+  font-size: 1.1rem !important;
+  margin-top: 0.2rem;
 }
 
 .user-rating {

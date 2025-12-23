@@ -31,7 +31,8 @@ function BundleCard({bundle}) {
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>
-                <p>{bundle.pickupStartTime} - {bundle.pickupEndTime}</p> {/*.split("-")[0]}*/}
+                <p>{bundle.pickupStartTime} - {bundle.pickupEndTime}</p>
+                {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
             </div>
         </div>
     )

@@ -158,3 +158,22 @@ export const unreserveBundle = async (bundleId) => {
   if (parseInt(res.status / 100) != 2) return false
   return true
 }
+
+export const createBundle = async (bundleData) => {
+  const token = getToken()
+  
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/bundles/new`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(bundleData)
+  })
+  
+  if (parseInt(res.status / 100) != 2) return false
+  return true
+}
