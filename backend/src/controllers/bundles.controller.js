@@ -141,7 +141,7 @@ const patchUnreserveBundle = async (req, res) => {
   const { bundleId } = req.body
   if (!bundleId) return res.status(400).json()
 
-  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "bundleId" = $1', [bundleId], (error, results) => {
+  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "buyerId" = $1 AND "bundleId" = $2', [buyerid, bundleId], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "Database error"})
