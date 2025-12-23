@@ -47,7 +47,7 @@ function Cart() {
 
   return (
       <div className="incart">
-        <h2>Your Cart</h2>
+      <h2>Your Cart - Total: { cartItems.map((b) => parseFloat(b.price)).reduce((a, b) => a + b, 0) } CHF</h2>
         <div className="bundle-grid">
           {cartItems.map((bundle) => (
             <BundleCard bundle={bundle} key={bundle.bundleId} />
