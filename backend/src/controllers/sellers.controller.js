@@ -20,7 +20,7 @@ const getSeller = async (req, res) => {
         return res.status(404).json({})
     }
     
-    pool.query('SELECT "sellerId", name, email, telephone, street || \' \' || street_no as "address", state, country FROM seller WHERE "sellerId" = $1 ORDER BY "sellerId" ;', [id], (error, results) => {
+    pool.query('SELECT "sellerId", name, email, telephone, street || \' \' || street_no as "address", state, npa, country FROM seller WHERE "sellerId" = $1 ORDER BY "sellerId" ;', [id], (error, results) => {
         if (error) {
             console.log("Erreur =>", error)
             return res.status(502).json({message: "Database error"})

@@ -130,7 +130,7 @@ export const reserveBundle = async (bundleId) => {
     method: 'PATCH',
     headers: headers,
     body: JSON.stringify({
-      id: bundleId
+      bundleId: bundleId
     })
   })
   
@@ -151,7 +151,7 @@ export const unreserveBundle = async (bundleId) => {
     method: 'PATCH',
     headers: headers,
     body: JSON.stringify({
-      id: bundleId
+      bundleId: bundleId
     })
   })
   
