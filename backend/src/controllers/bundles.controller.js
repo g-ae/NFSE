@@ -5,7 +5,7 @@ const SELECT_QUERY = 'SELECT "bundleId", "sellerId", "buyerId", "paymentMethodId
 const getBundles = async (req, res) => {
   pool.query(SELECT_QUERY + ' WHERE "reservedTime" is NULL', (error, results) => {
     if (error) {
-      console.log("Bundle error =>", error)
+      console.log("getBundles error =>", error)
       return res.status(502).json({message: "Database error"})
     }
     res.status(200).json(results.rows)
@@ -19,7 +19,7 @@ const getBundle = async (req, res) => {
 
   pool.query(SELECT_QUERY + ' WHERE "bundleId" = $1', [id], (error, results) => {
     if (error) {
-      console.log("Bundle ID error => ", error)
+      console.log("getBundle error => ", error)
       return res.status(502).json({message: "Database error"})
     }
     if (results.rows.length === 0) return res.status(204).json({message: "No bundle found"})
@@ -72,9 +72,9 @@ const getReservedBundles = async (req, res) => {
   
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "reservedTime" is not NULL AND "confirmedTime" = FALSE', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "reservedTime" IS NOT NULL AND "confirmedTime" IS NULL', [id], (error, results) => {
     if (error) {
-      console.log("Bundle ID error => ", error)
+      console.log("getReservedBundles error => ", error)
       return res.status(502).json({message: "Database error"})
     }
     return res.status(200).json(results.rows)
@@ -93,7 +93,7 @@ const getConfirmedBundle = async (req, res) => {
 
   pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "confirmedTime" IS NOT NULL', [id], (error, results) => {
     if (error) {
-      console.log("Bundle ID error => ", error)
+      console.log("getConfirmedBundle error => ", error)
       return res.status(502).json({message: "Database error"})
     }
     return res.status(200).json(results.rows)
@@ -168,7 +168,7 @@ const patchConfirmBundle = async (req, res) => {
   
   pool.query('UPDATE bundle SET "confirmedTime" = $1, "buyerId" = NULL WHERE "buyerId" = $2 AND "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, bundleId], (error, results) => {
     if (error) {
-      console.log(error)
+      console.log("patchConfirmBundle error,",error)
       return res.status(502).json({message: "Database error"})
     }
     return res.status(200).json(results.rows)
