@@ -1,4 +1,5 @@
 import express from 'express'
+import pool from './config/db.js'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
@@ -28,5 +29,14 @@ app.use("/buyers", buyerRoute)
 app.use("/sellers", sellerRoute)
 app.use("/bundles", bundleRoute)
 app.use("/account", accountRoute)
+
+// Cleanup task: Unreserve bundles held for > 15 mins without confirmation
+setInterval(async () => {
+  try {
+    await pool.query("UPDATE \"bundle\" SET \"reservedTime\" = NULL, \"buyerId\" = NULL WHERE \"reservedTime\" < NOW() - INTERVAL '15 minutes' AND \"confirmedTime\" IS NULL;");
+  } catch (err) {
+    console.error("Error cleaning up expired bundles:", err);
+  }
+}, 60 * 1000);
 
 export default app;
