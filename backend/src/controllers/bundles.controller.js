@@ -17,7 +17,7 @@ const getBundle = async (req, res) => {
 
   if (!id) return res.status(404).json({})
 
-  pool.query(SELECT_QUERY + ' WHERE "sellerId" = $1', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "bundleId" = $1', [id], (error, results) => {
     if (error) {
       console.log("Bundle ID error => ", error)
       return res.status(502).json({message: "Database error"})
@@ -91,7 +91,7 @@ const getConfirmedBundle = async (req, res) => {
   
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "confirmed" = TRUE', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "confirmedTime" IS NOT NULL', [id], (error, results) => {
     if (error) {
       console.log("Bundle ID error => ", error)
       return res.status(502).json({message: "Database error"})
