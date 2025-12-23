@@ -141,7 +141,32 @@ const patchUnreserveBundle = async (req, res) => {
   const { bundleId } = req.body
   if (!bundleId) return res.status(400).json()
 
-  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "buyerId" = $1 AND "bundleId" = $2', [buyerid, bundleId], (error, results) => {
+  pool.query('UPDATE bundle SET "reservedTime" = NULL, "buyerId" = NULL WHERE "buyerId" = $1 AND "bundleId" = $2 AND "confirmedTime" IS NULL', [buyerid, bundleId], (error, results) => {
+    if (error) {
+      console.log(error)
+      return res.status(502).json({message: "Database error"})
+    }
+    return res.status(200).json(results.rows)
+  })
+}
+
+// /bundles/confirm
+const patchConfirmBundle = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  // authorization
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const buyerid = token.split('/')[1]
+  
+  // body
+  if (!req.body) return res.status(400).json()
+  const { bundleId } = req.body
+  if (!bundleId) return res.status(400).json()
+  
+  pool.query('UPDATE bundle SET "confirmedTime" = $1, "buyerId" = NULL WHERE "buyerId" = $2 AND "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, bundleId], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "Database error"})
@@ -157,5 +182,6 @@ export {
   getReservedBundles,
   getConfirmedBundle,
   patchReserveBundle,
-  patchUnreserveBundle
+  patchUnreserveBundle,
+  patchConfirmBundle
 }
