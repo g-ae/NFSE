@@ -7,6 +7,15 @@ function BundleCard({bundle}) {
     //const incart = isReserved(bundle.bundleId)
     const icon = bundle.reservedTime ? "❌" : "🛒"
 
+    const formatDateTime = (iso) =>
+        new Date(iso).toLocaleString("fr-CH", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+
     const onIncartClick = (e) => {
         e.stopPropagation()
         if (!bundle.reservedTime) {
@@ -32,7 +41,7 @@ function BundleCard({bundle}) {
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>
-                <p>{bundle.pickupStartTime} - {bundle.pickupEndTime}</p>
+                <p>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</p>
                 {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
             </div>
         </div>
