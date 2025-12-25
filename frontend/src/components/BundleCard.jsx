@@ -5,6 +5,7 @@ import { reserveBundle, unreserveBundle } from "../services/api"
 function BundleCard({bundle}) {
     //const {isReserved, addToCart, removeFromCart} = useBundleContext()
     //const incart = isReserved(bundle.bundleId)
+    const icon = bundle.reservedTime ? "❌" : "🛒"
 
     const onIncartClick = (e) => {
         e.stopPropagation()
@@ -25,7 +26,7 @@ function BundleCard({bundle}) {
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
                 <div className="bundle-overlay">
                     <button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
-                        🛒
+                        {icon}
                     </button>
                 </div>
             </div>
