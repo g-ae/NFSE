@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
+import QrCodePage from "./pages/QrCodePage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/register/buyer" element={<RegisterBuyer />} />
           <Route path="/register/seller" element={<RegisterSeller />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/qrcode" element={<QrCodePage />} /> 
         </Routes>
       </main>
     </BundleProvider>

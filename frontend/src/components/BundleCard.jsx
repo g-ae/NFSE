@@ -1,10 +1,15 @@
+import { useState } from "react";
 import "../css/BundleCard.css"
 //import { useBundleContext } from "../context/BundleContext"
 import { reserveBundle, unreserveBundle } from "../services/api"
+import { useNavigate } from "react-router-dom";
+
+
 
 function BundleCard({bundle}) {
     //const {isReserved, addToCart, removeFromCart} = useBundleContext()
     //const incart = isReserved(bundle.bundleId)
+    const navigate = useNavigate();
     const icon = bundle.reservedTime ? "❌" : "🛒"
 
     const formatDateTime = (iso) =>
@@ -15,6 +20,8 @@ function BundleCard({bundle}) {
             hour: "2-digit",
             minute: "2-digit",
         });
+    
+    
 
     const onIncartClick = (e) => {
         e.stopPropagation()
@@ -29,6 +36,21 @@ function BundleCard({bundle}) {
         }
     }
 
+    function QrcodeButton() {
+        const onQrButtonClicked = (e) => {
+            e.stopPropagation();
+            navigate("/qrcode", { state: bundle.bundleId });;
+; 
+        }
+        return (
+            <div className="qr-btn-wrap">
+                <button className="qr-btn" onClick={onQrButtonClicked}>
+                    Show QR CODE
+                </button>
+            </div>
+        )
+    }
+
     return (
         <div className="bundle-card">
             <div className="bundle-poster">
@@ -38,6 +60,7 @@ function BundleCard({bundle}) {
                         {icon}
                     </button>
                 </div>
+                {bundle.reservedTime && <QrcodeButton/>}
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>

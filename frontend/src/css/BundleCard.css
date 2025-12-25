@@ -48,6 +48,58 @@
   opacity: 1;
 }
 
+/* le wrapper centre, ne scale jamais */
+.qr-btn-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* optionnel, mais souvent utile */
+  will-change: transform;
+}
+
+/* le bouton gère les effets visuels */
+.qr-btn {
+  opacity: 0;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(4px);
+
+  transform: scale(1);
+  transform-origin: center;
+
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bundle-card:hover .qr-btn {
+  opacity: 1;
+}
+
+.qr-btn:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+  transform: scale(1.05);
+}
+
+.qr-btn:active {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.18) inset;
+}
+
 .cart-btn {
   position: absolute;
   top: 1rem;
