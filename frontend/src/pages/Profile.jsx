@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { getToken } from '../services/cookies.js'
+import { useNavigate } from "react-router-dom";
+import { getToken, clearToken } from '../services/cookies.js'
 import { getBuyer, getSeller } from "../services/api.js";
 import { getAccountTypeFromToken } from "../services/utils.js";
 import "../css/Profile.css"; 
 
 function Profile() {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,6 +49,15 @@ function Profile() {
     fetchData();
   }, []);
 
+  const handleLogout = () => {
+    clearToken();
+    window.location.reload();
+  };
+
+  const handleHistory = () => {
+    alert("Past transactions feature coming soon!");
+  };
+
   if (loading) return <div className="loading">Loading profile...</div>;
   if (error) return <div className="error-message">{error}</div>;
   if (!userData) return <div className="error-message">No user data found.</div>;
@@ -85,6 +96,11 @@ function Profile() {
                 </div>
             </>
         )}
+      </div>
+      <hr className="profile-divider" />
+      <div className="profile-actions">
+        <button onClick={handleHistory}>Order History</button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </div>
   );

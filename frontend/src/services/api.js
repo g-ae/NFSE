@@ -117,6 +117,23 @@ export const getReservedBundles = async () => {
   return await res.json()
 }
 
+export const getConfirmedBundles = async () => {
+  const token = getToken()
+  
+  if (!token) return []
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  
+  const res = await fetch(`${BASE_URL}/bundles/confirmed`, {
+    headers: headers
+  })
+  
+  if (parseInt(res.status / 100) != 2) return []
+  
+  return await res.json()
+}
+
 export const reserveBundle = async (bundleId) => {
   const token = getToken()
   

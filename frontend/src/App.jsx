@@ -7,6 +7,7 @@ import NewBundle from "./pages/NewBundle";
 import RegisterBuyer from "./pages/RegisterBuyer";
 import RegisterSeller from "./pages/RegisterSeller";
 import Profile from "./pages/Profile";
+import CurrentOrders from "./pages/CurrentOrders";
 import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register/buyer" element={<RegisterBuyer />} />
           <Route path="/register/seller" element={<RegisterSeller />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/current-orders" element={<CurrentOrders />} />
           <Route path="/qrcode" element={<QrCodePage />} /> 
         </Routes>
       </main>

@@ -28,22 +28,18 @@ function UserSection() {
     fetchInfo();
   }, []);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    clearToken();
-    window.location.reload();
-  };
-
   if (isLoggedIn()) {
     return (
       <>
         {accountType === "Seller" ? (
           <Link to="/new-bundle" className="nav-link">New Bundle</Link>
         ) : (
-          <Link to="/cart" className="nav-link">Cart</Link>
+          <>
+            <Link to="/cart" className="nav-link">Cart</Link>
+            <Link to="/current-orders" className="nav-link">Current Orders</Link>
+          </>
         )}
         <Link to="/profile" className="nav-link">{userInfo}</Link>
-        <a href="#" className="nav-link" onClick={handleLogout}>Logout</a>
       </>
     );
   }
