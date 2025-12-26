@@ -60,7 +60,7 @@ function BundleCard({bundle}) {
                         {icon}
                     </button>
                 </div>
-                {bundle.reservedTime && <QrcodeButton/>}
+                {bundle.confirmedTime && <QrcodeButton/>}
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>

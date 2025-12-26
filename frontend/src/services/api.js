@@ -177,3 +177,22 @@ export const createBundle = async (bundleData) => {
   if (parseInt(res.status / 100) != 2) return false
   return true
 }
+
+export const confirmBundle = async(bundleId) => {
+  const token = getToken()
+  
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/bundles/confirm`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({bundleId: bundleId})
+  })
+  
+  if (parseInt(res.status / 100) != 2) return false
+  return true
+}

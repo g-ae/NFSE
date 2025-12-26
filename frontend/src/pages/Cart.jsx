@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Cart.css";
 import BundleCard from "../components/BundleCard";
 import { isLoggedIn } from "../services/cookies";
-import { getReservedBundles } from '../services/api.js'
+import { getReservedBundles, confirmBundle } from '../services/api.js'
 
 function Cart() {
   const navigate = useNavigate();
@@ -45,9 +45,33 @@ function Cart() {
     )
   }
 
+  const total = cartItems.map((b) => parseFloat(b.price)).reduce((a, b) => a + b, 0);
+
+  const handleConfirmOrder = async () => {
+    setLoading(true)
+    let errors = false
+    for (const b of cartItems) {
+      if (!(await confirmBundle(b.bundleId))) {
+        errors = true
+      }
+    }
+    
+    if (errors) {
+      alert("An error occurred, please try again later.")
+    } else {
+      alert("Order confirmed! Total: " + total + " CHF");
+    }
+    setLoading(false)
+  };
+
   return (
-      <div className="incart">
-      <h2>Your Cart - Total: { cartItems.map((b) => parseFloat(b.price)).reduce((a, b) => a + b, 0) } CHF</h2>
+      <div>
+        <div className="cart-header">
+          <h2>Your Cart - Total: { total } CHF</h2>
+          <button className="confirm-button" onClick={handleConfirmOrder}>
+            Confirm order
+          </button>
+        </div>
         <div className="bundle-grid">
           {cartItems.map((bundle) => (
             <BundleCard bundle={bundle} key={bundle.bundleId} />
