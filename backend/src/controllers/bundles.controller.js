@@ -166,7 +166,7 @@ const patchConfirmBundle = async (req, res) => {
   const { bundleId } = req.body
   if (!bundleId) return res.status(400).json()
   
-  pool.query('UPDATE bundle SET "confirmedTime" = $1, "buyerId" = NULL WHERE "buyerId" = $2 AND "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, bundleId], (error, results) => {
+  pool.query('UPDATE bundle SET "confirmedTime" = $1 WHERE "buyerId" = $2 AND "bundleId" = $3', [new Date(Date.now()).toJSON(), buyerid, bundleId], (error, results) => {
     if (error) {
       console.log("patchConfirmBundle error,",error)
       return res.status(502).json({message: "Database error"})
