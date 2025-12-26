@@ -56,9 +56,9 @@ function BundleCard({bundle}) {
             <div className="bundle-poster">
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
                 <div className="bundle-overlay">
-                    <button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
-                        {icon}
-                    </button>
+                  { (bundle.confirmedTime) ? "" : (<button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
+                    {icon}
+                  </button>) }
                 </div>
                 {bundle.confirmedTime && <QrcodeButton/>}
             </div>
