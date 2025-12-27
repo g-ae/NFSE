@@ -68,11 +68,10 @@ const getReservedBundles = async (req, res) => {
   const bearer = req.headers.authorization
   
   const token = bearer.split(' ')[1]
-  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
-  
+  const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "reservedTime" IS NOT NULL AND "confirmedTime" IS NULL', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "reservedTime" IS NOT NULL AND "confirmedTime" IS NULL`, [id], (error, results) => {
     if (error) {
       console.log("getReservedBundles error => ", error)
       return res.status(502).json({message: "Database error"})
@@ -87,11 +86,10 @@ const getConfirmedBundle = async (req, res) => {
   const bearer = req.headers.authorization
   
   const token = bearer.split(' ')[1]
-  if (token[0] != "b") return res.status(401).json({message: "this action cannot be performed by the specified account"})
-  
+  const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ' WHERE "buyerId" = $1 AND "confirmedTime" IS NOT NULL', [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "confirmedTime" IS NOT NULL`, [id], (error, results) => {
     if (error) {
       console.log("getConfirmedBundle error => ", error)
       return res.status(502).json({message: "Database error"})
