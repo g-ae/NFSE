@@ -61,3 +61,66 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+/* ===== SELLERS HOME ===== */
+.sellers-home {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 1rem;
+}
+
+/* Chaque section (Not Reserved / Reserved / Confirmed) */
+.sellers-home .bundle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Titre des sections */
+.grid-title {
+  grid-column: 1 / -1;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+  padding-left: 0.5rem;
+  border-left: 4px solid #e50914;
+}
+
+/* Messages "No bundles yet" */
+.bundle-grid:has(:not(.bundle-card)) {
+  color: #aaa;
+  font-style: italic;
+  padding-left: 0.5rem;
+}
+
+/* Couleurs spécifiques par état */
+.pop-grid .grid-title {
+  border-left-color: #3498db; /* bleu */
+}
+
+.res-grid .grid-title {
+  border-left-color: #f1c40f; /* jaune */
+}
+
+.con-grid .grid-title {
+  border-left-color: #2ecc71; /* vert */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sellers-home {
+    gap: 2rem;
+  }
+
+  .grid-title {
+    font-size: 1.3rem;
+  }
+}
+
+.empty-grid {
+  color: #aaa;
+  font-style: italic;
+  margin: 0;
+}

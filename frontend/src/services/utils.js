@@ -9,11 +9,11 @@ async function sha256(message) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
 
     // convert bytes to hex string                  
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); 
 }
 
 const getAccountTypeFromToken = (token) => {
+  if (!token || typeof token !== "string") return "Unknown";
   switch (token[0]) {
     case "b":
       return "Buyer"

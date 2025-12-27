@@ -11,7 +11,7 @@ import CurrentOrders from "./pages/CurrentOrders";
 import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
-import QrCodePage from "./pages/QrCodePage";
+import QrCode from "./pages/QrCode";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           <Route path="/register/seller" element={<RegisterSeller />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/current-orders" element={<CurrentOrders />} />
-          <Route path="/qrcode" element={<QrCodePage />} /> 
+          <Route path="/qrcode" element={<QrCode />} />
         </Routes>
       </main>
     </BundleProvider>

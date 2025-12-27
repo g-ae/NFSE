@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../css/BundleCard.css"
 //import { useBundleContext } from "../context/BundleContext"
 import { reserveBundle, unreserveBundle } from "../services/api"

@@ -1,19 +1,51 @@
 import BundleCard from "../components/BundleCard";
 import { useState, useEffect } from "react";
-import { searchBundles, getPopularBundles } from "../services/api.js";
+import { searchBundles, getPopularBundles, getReservedBundles, getConfirmedBundles } from "../services/api.js";
 import "../css/Home.css";
+import { isLoggedIn } from "../services/cookies";
+import { getToken } from '../services/cookies.js';
+import { getUserId } from "../services/cookies.js";
+import { getAccountTypeFromToken } from "../services/utils.js";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [bundles, setBundles] = useState([]);
+  const [rbundles, setRBundles] = useState([]);
+  const [cbundles, setCBundles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [accountType, setAccountType] = useState("unknown")
+  
 
   useEffect(() => {
     const loadPopularBundles = async () => {
-      try {
+      try { 
         const popularBundles = await getPopularBundles();
+ 
+        if (!isLoggedIn()) {
+          setBundles(popularBundles);
+          return;
+        }
+        const token = getToken();
+        const type = getAccountTypeFromToken(token);
+        setAccountType(type);
+        if (type === "Seller") {
+          const reservedBundles = await getReservedBundles();
+          const confirmedBundles = await getConfirmedBundles();
+          const sellerId = getUserId(token)
+          function filterBundles(bundles, sellerId){
+            return bundles.filter(
+              bundle => bundle.sellerId === sellerId
+            )
+          }
+          setBundles(filterBundles(popularBundles, sellerId));
+          setRBundles(reservedBundles);
+          setCBundles(confirmedBundles);
+          return;
+        } 
         setBundles(popularBundles);
+
+
       } catch (err) {
         console.log(err);
         setError("Failed to load the bundles...");
@@ -43,6 +75,44 @@ function Home() {
     }
   };
 
+  function SellersHome() {
+    function Sgrid({ title, bundlesref, className }) {
+      return (
+        <div className={`bundle-grid ${className || ""}`}>
+          <h2 className="grid-title">{title}</h2>
+
+          {bundlesref.length === 0 ? (
+            <p className="empty-grid">No bundles yet</p>
+          ) : (
+            bundlesref.map((bundle) => (
+              <BundleCard bundle={bundle} key={bundle.bundleId} />
+            ))
+          )}
+        </div>
+      );
+    }
+    return (
+      <div className="sellers-home">
+        <Sgrid className="pop-grid" title="Not Reserved" bundlesref={bundles} />
+        <Sgrid className="res-grid" title="Reserved" bundlesref={rbundles} />
+        <Sgrid className="con-grid" title="Confirmed" bundlesref={cbundles} />
+      </div>
+    );
+  }
+
+
+  function BuyersHome() {
+    return (
+      <div className="bundle-grid">
+            {(bundles.length == 0) ? "No bundles available" : bundles.map((bundle) => (
+              <BundleCard bundle={bundle} key={bundle.bundleId} />
+            ))}
+      </div>  
+    )
+  }
+
+
+
   return (
     <div className="home">
       <form onSubmit={handleSearch} className="search-form">
@@ -59,15 +129,10 @@ function Home() {
       </form>
 
         {error && <div className="error-message">{error}</div>}
-
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
-        <div className="bundle-grid">
-            {(bundles.length == 0) ? "No bundles available" : bundles.map((bundle) => (
-              <BundleCard bundle={bundle} key={bundle.bundleId} />
-            ))}
-        </div>
+        accountType === "Seller" ? <SellersHome /> : <BuyersHome />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
 import { sha256 } from "../services/utils";
 
-export default function QrCodePage() {
+function QrCode() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -28,3 +28,6 @@ export default function QrCodePage() {
     </div>
   );
 }
+
+export default QrCode;
+

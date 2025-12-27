@@ -21,9 +21,18 @@ function getToken() {
   return cookies.get(TOKEN_NAME)
 }
 
+function getUserId(token) {
+  if (!token || typeof token !== "string") return null;
+  const elements = token.split("/");
+  if (elements.length !== 2) return null;
+  const id = Number(elements[1]);
+  return id;
+}
+
 export {
   isLoggedIn,
   saveToken,
   clearToken,
-  getToken
+  getToken,
+  getUserId
 }
