@@ -39,6 +39,11 @@ const newBundle = async (req, res) => {
 
   const {content, pickupStartTime, pickupEndTime, price} = req.body
   
+  if (Date.parse(pickupEndTime) - Date.parse(pickupStartTime) < 30*1000*60) {
+    // if less than 30 mins in pickup time, error
+    return res.status(400).json({message: "the client must have at least 30 mins to pick up the bundle"})
+  }
+  
   let pricef
   try {
     pricef = parseFloat(price)
