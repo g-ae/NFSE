@@ -1,15 +1,28 @@
+import { useEffect, useState } from "react";
 import "../css/BundleCard.css"
 //import { useBundleContext } from "../context/BundleContext"
 import { reserveBundle, unreserveBundle } from "../services/api"
 import { useNavigate } from "react-router-dom";
+import { getAccountTypeFromToken } from "../services/utils";
+import { getToken, isLoggedIn } from "../services/cookies";
 
 
 
 function BundleCard({bundle}) {
     //const {isReserved, addToCart, removeFromCart} = useBundleContext()
     //const incart = isReserved(bundle.bundleId)
+    const [accountType, setAccountType] = useState("unknown")
     const navigate = useNavigate();
     const icon = bundle.reservedTime ? "❌" : "🛒"
+    
+    useEffect(() => {
+        if (isLoggedIn()) {
+            const token = getToken();
+            setAccountType(getAccountTypeFromToken(token));
+        } else {
+            setAccountType("unknown");
+        }
+    }, []);
 
     const formatDateTime = (iso) =>
         new Date(iso).toLocaleString("fr-CH", {
@@ -35,17 +48,23 @@ function BundleCard({bundle}) {
         }
     }
 
-    function QrcodeButton() {
-        const onQrButtonClicked = (e) => {
-            e.stopPropagation();
-            navigate("/qrcode", { state: bundle.bundleId });;
-; 
-        }
+    
+    const onQrButtonClicked = (e) => {
+        e.stopPropagation();
+        navigate("/qrcode", { state: bundle.bundleId });
+    }
+
+    const onScannerButtonClicked = (e) => {
+        e.stopPropagation();
+        navigate("/scan", { state : bundle.bundleId});
+    }
+
+    function CartButton() {
         return (
-            <div className="qr-btn-wrap">
-                <button className="qr-btn" onClick={onQrButtonClicked}>
-                    Show QR CODE
-                </button>
+            <div className="bundle-overlay">
+                {(bundle.confirmedTime) ? "" : (<button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
+                    {icon}
+                </button>)}
             </div>
         )
     }
@@ -54,12 +73,21 @@ function BundleCard({bundle}) {
         <div className="bundle-card">
             <div className="bundle-poster">
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
-                <div className="bundle-overlay">
-                  { (bundle.confirmedTime) ? "" : (<button className={`cart-btn ${!bundle.reservedTime ? "" : "active"}`} onClick={onIncartClick}>
-                    {icon}
-                  </button>) }
-                </div>
-                {bundle.confirmedTime && <QrcodeButton/>}
+                {accountType === "Buyer" && <CartButton />}
+                {bundle.confirmedTime && accountType === "Buyer" && (
+                    <div className="qr-btn-wrap">
+                        <button className="qr-btn" onClick={onQrButtonClicked}>
+                            Show QR CODE
+                        </button>
+                    </div>
+                )}
+                {bundle.confirmedTime && accountType === "Seller" && (
+                    <div className="qr-btn-wrap">
+                        <button className="qr-btn" onClick={onScannerButtonClicked}>
+                            Scan QR Code
+                        </button>
+                    </div>
+                )}
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>

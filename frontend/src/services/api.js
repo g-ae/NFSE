@@ -230,3 +230,22 @@ export const getOldBundles = async () => {
   
   return await res.json()
 }
+
+export const confirmPickup = async(bundleId) => {
+  const token = getToken()
+
+  if(!token) return false 
+
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/bundles/confirmPickup`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({bundleId: bundleId})
+  })
+
+  if (parseInt(res.status / 100) != 2) return false
+  return true
+}

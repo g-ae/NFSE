@@ -13,6 +13,8 @@ import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
 import QrCode from "./pages/QrCode";
+import QrScanner from "./pages/QrScanner";
+import ScanConfirmation from "./pages/Confirmation";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/current-orders" element={<CurrentOrders />} />
           <Route path="/history" element={<OrderHistory />} />
           <Route path="/qrcode" element={<QrCode />} />
+          <Route path="/scan" element={<QrScanner />} />
+          <Route path="/scan/confirmation" element={<ScanConfirmation />} />
         </Routes>
       </main>
     </BundleProvider>
