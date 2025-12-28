@@ -213,3 +213,20 @@ export const confirmBundle = async(bundleId) => {
   if (parseInt(res.status / 100) != 2) return false
   return true
 }
+
+export const getOldBundles = async () => {
+  const token = getToken()
+  
+  if (!token) return []
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  
+  const res = await fetch(`${BASE_URL}/bundles/history`, {
+    headers: headers
+  })
+  
+  if (parseInt(res.status / 100) != 2) return []
+  
+  return await res.json()
+}

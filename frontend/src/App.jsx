@@ -8,6 +8,7 @@ import RegisterBuyer from "./pages/RegisterBuyer";
 import RegisterSeller from "./pages/RegisterSeller";
 import Profile from "./pages/Profile";
 import CurrentOrders from "./pages/CurrentOrders";
+import OrderHistory from "./pages/OrderHistory";
 import { Routes, Route } from "react-router-dom";
 import { BundleProvider } from "./context/BundleContext";
 import NavBar from "./components/NavBar";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/register/seller" element={<RegisterSeller />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/current-orders" element={<CurrentOrders />} />
+          <Route path="/history" element={<OrderHistory />} />
           <Route path="/qrcode" element={<QrCode />} />
         </Routes>
       </main>

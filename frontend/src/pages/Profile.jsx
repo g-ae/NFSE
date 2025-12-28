@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { getToken, clearToken } from '../services/cookies.js'
 import { getBuyer, getSeller } from "../services/api.js";
 import { getAccountTypeFromToken } from "../services/utils.js";
+import { useNavigate } from "react-router-dom";
 import "../css/Profile.css"; 
 
 function Profile() {
@@ -54,8 +54,8 @@ function Profile() {
     window.location.reload();
   };
 
-  const handleHistory = () => {
-    alert("Past transactions feature coming soon!");
+  const handleHistory = async () => {
+    navigate('/history');
   };
 
   if (loading) return <div className="loading">Loading profile...</div>;

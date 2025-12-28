@@ -47,7 +47,6 @@ const newBundle = async (req, res) => {
   } catch(e) {
     return res.status(400).json({message: "arg type is wrong"})
   }
-  console.log(typeof pricef, pricef)
   
   if (!content || !pickupStartTime || !pickupEndTime || !price) return res.status(400).json({message: "missing data"})
   
@@ -81,7 +80,7 @@ const getReservedBundles = async (req, res) => {
 }
 
 // /bundles/confirmed/
-const getConfirmedBundle = async (req, res) => {
+const getConfirmedBundles = async (req, res) => {
   if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
   const bearer = req.headers.authorization
   
@@ -89,9 +88,27 @@ const getConfirmedBundle = async (req, res) => {
   const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "confirmedTime" IS NOT NULL`, [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "confirmedTime" IS NOT NULL AND "pickupRealTime" IS NULL`, [id], (error, results) => {
     if (error) {
       console.log("getConfirmedBundle error => ", error)
+      return res.status(502).json({message: "Database error"})
+    }
+    return res.status(200).json(results.rows)
+  })
+}
+
+// /bundles/history/
+const getOldBundles = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  const type = token.split('/')[0]
+  const id = token.split('/')[1]
+
+  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "pickupRealTime" IS NOT NULL`, [id], (error, results) => {
+    if (error) {
+      console.log("getOldBundles error => ", error)
       return res.status(502).json({message: "Database error"})
     }
     return res.status(200).json(results.rows)
@@ -178,8 +195,9 @@ export {
   getBundle,
   newBundle,
   getReservedBundles,
-  getConfirmedBundle,
+  getConfirmedBundles,
   patchReserveBundle,
   patchUnreserveBundle,
-  patchConfirmBundle
+  patchConfirmBundle,
+  getOldBundles
 }
