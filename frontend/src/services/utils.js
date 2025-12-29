@@ -13,7 +13,7 @@ async function sha256(message) {
 }
 
 const getAccountTypeFromToken = (token) => {
-  if (!token || typeof token !== "string") return "Unknown";
+  if (!token) return "Unknown";
   switch (token[0]) {
     case "b":
       return "Buyer"

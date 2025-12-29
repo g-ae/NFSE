@@ -249,3 +249,51 @@ export const confirmPickup = async(bundleId) => {
   if (parseInt(res.status / 100) != 2) return false
   return true
 }
+
+export const getIsRatedFrom = async(userId) => {
+  const token = getToken()
+  
+  if (!token || !userId) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/ratings/hasRated?id=${userId}`, {
+    method: 'GET',
+    headers: headers
+  })
+  
+  if (parseInt(res.status / 100) != 2) return null
+  return (await res.json()).length != 0
+}
+
+export const postRate = async(userId, stars) => {
+  const token = getToken()
+  
+  if (!token || !userId || !stars) throw "missing args"
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+  
+  const res = await fetch(`${BASE_URL}/ratings/rate`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({userId: userId, stars: stars})
+  })
+  
+  if (parseInt(res.status / 100) != 2) throw res
+}
+
+export const getBuyerRating = async (id) => {
+  const res = await fetch(`${BASE_URL}/ratings/buyer/${id}`)
+  if (parseInt(res.status / 100) != 2) return null
+  return await res.json()
+}
+
+export const getSellerRating = async (id) => {
+  const res = await fetch(`${BASE_URL}/ratings/seller/${id}`)
+  if (parseInt(res.status / 100) != 2) return null
+  return await res.json()
+}

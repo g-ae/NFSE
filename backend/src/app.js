@@ -23,12 +23,14 @@ import buyerRoute from './routes/buyers.route.js'
 import sellerRoute from './routes/sellers.route.js'
 import bundleRoute from './routes/bundles.route.js'
 import accountRoute from './routes/account.route.js'
+import ratingsRoute from './routes/ratings.route.js'
 
 // routes
 app.use("/buyers", buyerRoute)
 app.use("/sellers", sellerRoute)
 app.use("/bundles", bundleRoute)
 app.use("/account", accountRoute)
+app.use("/ratings", ratingsRoute)
 
 // Cleanup task: Unreserve bundles held for > 15 mins without confirmation
 setInterval(async () => {

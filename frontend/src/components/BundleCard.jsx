@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../css/BundleCard.css"
 //import { useBundleContext } from "../context/BundleContext"
-import { reserveBundle, unreserveBundle } from "../services/api"
+import { reserveBundle, unreserveBundle, getIsRatedFrom, postRate } from "../services/api"
 import { useNavigate } from "react-router-dom";
 import { getAccountTypeFromToken } from "../services/utils";
 import { getToken, isLoggedIn } from "../services/cookies";
@@ -12,16 +12,28 @@ function BundleCard({bundle}) {
     //const {isReserved, addToCart, removeFromCart} = useBundleContext()
     //const incart = isReserved(bundle.bundleId)
     const [accountType, setAccountType] = useState("unknown")
+    const [isRated, setRated] = useState(false)
+    const [showRating, setShowRating] = useState(false)
+    const [rating, setRating] = useState(0)
     const navigate = useNavigate();
     const icon = bundle.reservedTime ? "❌" : "🛒"
     
     useEffect(() => {
+      const fetchData = async () => {
+        let accType = "unknown"
         if (isLoggedIn()) {
-            const token = getToken();
-            setAccountType(getAccountTypeFromToken(token));
+          const token = getToken();
+          accType = getAccountTypeFromToken(token)
+          setAccountType();
         } else {
-            setAccountType("unknown");
+          setAccountType("unknown");
         }
+        
+        const id = accType === "Buyer" ? bundle.sellerId : bundle.buyerId
+        setRated(await getIsRatedFrom(id))
+      };
+
+      fetchData();
     }, []);
 
     const formatDateTime = (iso) =>
@@ -58,6 +70,18 @@ function BundleCard({bundle}) {
         e.stopPropagation();
         navigate("/scan", { state : bundle.bundleId});
     }
+    
+    const onRateButtonClicked = (e) => {
+      e.stopPropagation()
+      setShowRating(true)
+    }
+
+    const submitRating = async (e) => {
+        e.stopPropagation()
+        setRated(true)
+        await postRate(getToken()[0] == "b" ? bundle.sellerId : bundle.buyerId,rating)
+        setShowRating(false)
+    }
 
     function CartButton() {
         return (
@@ -74,14 +98,14 @@ function BundleCard({bundle}) {
             <div className="bundle-poster">
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
                 {accountType === "Buyer" && <CartButton />}
-                {bundle.confirmedTime && accountType === "Buyer" && (
+                {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Buyer" && (
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onQrButtonClicked}>
                             Show QR CODE
                         </button>
                     </div>
                 )}
-                {bundle.confirmedTime && accountType === "Seller" && (
+                {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Seller" && (
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onScannerButtonClicked}>
                             Scan QR Code
@@ -91,8 +115,27 @@ function BundleCard({bundle}) {
             </div>
             <div className="bundle-info">
                 <h3>{bundle.content}</h3>
-                <p>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</p>
+                {!bundle.pickupRealTime && <p>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</p>}
+                {bundle.pickupRealTime && `Picked up at ${formatDateTime(bundle.pickupRealTime)}`}
                 {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
+                {bundle.pickupRealTime && !isRated && (
+                    !showRating ? (
+                        <button onClick={onRateButtonClicked}>Rate { accountType == "Buyer" ? "seller" : "buyer" }</button>
+                    ) : (
+                        <div className="rating-container" onClick={(e) => e.stopPropagation()}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button 
+                                    key={star}
+                                    className={`star-btn ${star <= rating ? "active" : ""}`}
+                                    onClick={() => setRating(star)}
+                                >
+                                    ★
+                                </button>
+                            ))}
+                            <button className="rating-submit" onClick={submitRating} disabled={rating === 0}>Send</button>
+                        </div>
+                    )
+                )}
             </div>
         </div>
     )

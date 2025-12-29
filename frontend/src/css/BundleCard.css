@@ -135,6 +135,44 @@
   margin-top: 0.5rem;
 }
 
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0;
+  color: #555;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.star-btn.active {
+  color: #ffd700;
+}
+
+.rating-submit {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.rating-submit:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
 .bundle-info {
   padding: 1rem;
   flex: 1;

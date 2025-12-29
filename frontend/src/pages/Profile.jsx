@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getToken, clearToken } from '../services/cookies.js'
-import { getBuyer, getSeller } from "../services/api.js";
+import { getBuyer, getSeller, getBuyerRating, getSellerRating } from "../services/api.js";
 import { getAccountTypeFromToken } from "../services/utils.js";
 import { useNavigate } from "react-router-dom";
 import "../css/Profile.css"; 
@@ -11,6 +11,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [accountType, setAccountType] = useState("");
+  const [rating, setRating] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,16 +28,23 @@ function Profile() {
 
       try {
         let data = null;
+        let ratingData = null;
         if (type === "Buyer") {
           data = await getBuyer(id);
+          ratingData = await getBuyerRating(id);
         } else if (type === "Seller") {
           data = await getSeller(id);
+          ratingData = await getSellerRating(id);
         }
 
         if (data) {
           setUserData(data);
         } else {
           setError("Failed to fetch user data.");
+        }
+
+        if (ratingData) {
+            setRating(ratingData.rating);
         }
       } catch (err) {
         console.error(err);
@@ -58,6 +66,20 @@ function Profile() {
     navigate('/history');
   };
 
+    const renderStars = (ratingValue) => {
+    if (ratingValue === null || ratingValue === undefined) return "No rating yet";
+    const stars = [];
+    const numRating = Number(ratingValue);
+    for (let i = 1; i <= 5; i++) {
+        stars.push(
+            <span key={i} style={{ color: i <= Math.round(numRating) ? '#ffd700' : '#555' }}>
+                ★
+            </span>
+        );
+    }
+    return <span className="profile-stars">{stars} ({numRating.toFixed(1)})</span>;
+  };
+
   if (loading) return <div className="loading">Loading profile...</div>;
   if (error) return <div className="error-message">{error}</div>;
   if (!userData) return <div className="error-message">No user data found.</div>;
@@ -77,6 +99,10 @@ function Profile() {
         <div className="profile-item">
             <strong className="profile-label">Telephone:</strong> 
             <span className="profile-value">{userData.telephone}</span>
+        </div>
+        <div className="profile-item">
+            <strong className="profile-label">Rating:</strong> 
+            <span className="profile-value">{renderStars(rating)}</span>
         </div>
         
         {accountType === "Seller" && (
