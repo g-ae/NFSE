@@ -47,7 +47,7 @@ POST "/bundles/new"             -> create new bundle with data from JSON body (n
 PATCH "/bundles/reserve"        -> reserve a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
 PATCH "/bundles/unreserve"      -> unreserve a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
 PATCH "/bundles/confirm"        -> confirm a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
-*PATCH "/bundles/confirmPickup"  -> confirm that a bundle has been picked up by the buyer, needs Authorization header + JSON body with "bundleId".
+PATCH "/bundles/confirmPickup"  -> confirm that a bundle has been picked up by the buyer, needs Authorization header + JSON body with "bundleId".
 
 POST "/account/buyer"           -> login for buyer account (email / password in JSON body as "email" and "password"). password must be SHA-256 encrypted. This will return a token that can be used to rate sellers, buy bundles, etc.
 POST "/account/buyer/register"  -> register a buyer account, all data in JSON body

@@ -195,6 +195,31 @@ const patchConfirmBundle = async (req, res) => {
   })
 }
 
+// /bundles/confirmPickup
+const patchConfirmBundlePickup = async (req, res) => {
+  if (!req.headers.authorization) return res.status(403).json({message: "authorization is required"})
+  // authorization
+  const bearer = req.headers.authorization
+  
+  const token = bearer.split(' ')[1]
+  if (token[0] != "s") return res.status(401).json({message: "this action cannot be performed by the specified account"})
+  
+  const sellerId = token.split('/')[1]
+  
+  // body
+  if (!req.body) return res.status(400).json({message: "missing body"})
+  const { bundleId } = req.body
+  if (!bundleId) return res.status(400).json({message: "missing bundleId in body"})
+  
+  pool.query('UPDATE bundle SET "pickupRealTime" = $1 WHERE "sellerId" = $2 AND "bundleId" = $3', [new Date(Date.now()).toJSON(), sellerId, bundleId], (error, results) => {
+    if (error) {
+      console.log("patchConfirmBundlePickup error,",error)
+      return res.status(502).json({message: "Database error"})
+    }
+    return res.status(200).json(results.rows)
+  })
+}
+
 export {
   getBundles,
   getBundle,
@@ -204,5 +229,6 @@ export {
   patchReserveBundle,
   patchUnreserveBundle,
   patchConfirmBundle,
-  getOldBundles
+  getOldBundles,
+  patchConfirmBundlePickup
 }
