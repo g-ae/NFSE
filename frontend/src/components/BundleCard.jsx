@@ -24,7 +24,7 @@ function BundleCard({bundle}) {
         if (isLoggedIn()) {
           const token = getToken();
           accType = getAccountTypeFromToken(token)
-          setAccountType();
+          setAccountType(accType);
         } else {
           setAccountType("unknown");
         }
