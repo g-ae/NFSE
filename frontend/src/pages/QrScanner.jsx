@@ -44,15 +44,28 @@ function QrScanner() {
 
         (async () => {
             try {
-                const devices = await BrowserMultiFormatReader.listVideoInputDevices();
-                if (cancelled) return;
-
-                if (!devices.length) {
-                    setError("No camera device found");
-                    return
+                let deviceId = undefined;
+                try {
+                    const devices = await BrowserMultiFormatReader.listVideoInputDevices();
+                    if (devices && devices.length > 0) {
+                        // Default to first device
+                        deviceId = devices[0].deviceId;
+                        
+                        // Try to find a back-facing camera
+                        const backCamera = devices.find(device => 
+                            device.label.toLowerCase().includes('back') || 
+                            device.label.toLowerCase().includes('rear') ||
+                            device.label.toLowerCase().includes('environment')
+                        );
+                        if (backCamera) {
+                            deviceId = backCamera.deviceId;
+                        }
+                    }
+                } catch (enumError) {
+                    console.warn("Could not enumerate devices, attempting to use default camera:", enumError);
                 }
 
-                const deviceId = devices[0].deviceId;
+                if (cancelled) return;
 
                 await reader.decodeFromVideoDevice(deviceId, videoRef.current, async (result, err) => {
                     if (cancelled) return;
@@ -60,7 +73,8 @@ function QrScanner() {
                     if (err && err.name === "NotFoundExeption") return;
 
                     if (err && err.name !== "NotFoundExpetion") {
-                        setError(err.message);
+                        // Only log real errors, not the "not found" which happens every frame
+                        // setError(err.message); 
                         return;
                     }
 
