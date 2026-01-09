@@ -58,7 +58,6 @@ function NavBar() {
             <Link to="/">NFSE</Link>
         </div>
         <div className="navbar-links">
-            <Link to="/" className="nav-link">Home</Link>
             <UserSection />
         </div>
     </nav>
