@@ -8,6 +8,7 @@ RUN npm install
 
 # Copie du code source et build en prod
 COPY . .
+RUN npm run build
 
 EXPOSE 4173
 
