@@ -12,9 +12,12 @@ function RegisterSeller() {
     telephone: "",
     country: "",
     state: "",
+    city: "",
     npa: "",
     street: "",
-    street_no: ""
+    street_no: "",
+    latitude: "",
+    longitude: ""
   });
   const [error, setError] = useState("");
 
@@ -114,7 +117,8 @@ function RegisterSeller() {
             required
           />
         </div>
-
+        
+        
         <div className="form-group">
           <input
             type="text"
@@ -127,7 +131,7 @@ function RegisterSeller() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group" style={{display: "flex", gap: "10px"}}>
           <input
             type="text"
             name="npa"
@@ -136,10 +140,21 @@ function RegisterSeller() {
             value={formData.npa}
             onChange={handleChange}
             required
+            style={{flex: 1}}
+          />
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            className="login-input"
+            value={formData.city}
+            onChange={handleChange}
+            required
+            style={{flex: 2}}
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group" style={{display: "flex", gap: "10px"}}>
           <input
             type="text"
             name="street"
@@ -149,9 +164,7 @@ function RegisterSeller() {
             onChange={handleChange}
             required
           />
-        </div>
-
-        <div className="form-group">
+          
           <input
             type="text"
             name="street_no"
@@ -160,6 +173,75 @@ function RegisterSeller() {
             value={formData.street_no}
             onChange={handleChange}
             required
+          />
+        </div>
+
+        <div className="form-group">
+          <button 
+            type="button" 
+            className="login-button" 
+            style={{backgroundColor: "#4CAF50", marginBottom: "1rem"}}
+            onClick={() => {
+              const getLocation = () => {
+                if (navigator.geolocation) {
+                   navigator.geolocation.getCurrentPosition((position) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      latitude: position.coords.latitude,
+                      longitude: position.coords.longitude
+                    }));
+                  }, async (err) => {
+                    console.error("Geolocation API failed:", err);
+                    // Fallback to IP Geolocation
+                    try {
+                      const response = await fetch("https://ipwho.is/");
+                      const data = await response.json();
+                      if (data.latitude && data.longitude) {
+                        setFormData(prev => ({
+                          ...prev,
+                          latitude: data.latitude,
+                          longitude: data.longitude
+                        }));
+                        alert("Browser location failed. Used approximate IP-based location.");
+                      } else {
+                        throw new Error("Invalid data from IP API");
+                      }
+                    } catch (ipErr) {
+                      console.error("IP Geolocation failed:", ipErr);
+                      alert("Could not determine location. Please try again or check permissions.");
+                    }
+                  }, {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                    maximumAge: 0
+                  });
+                } else {
+                  alert("Geolocation is not supported by this browser.");
+                }
+              }
+              getLocation();
+            }}
+          >
+            Get My Location
+          </button>
+        </div>
+
+        <div className="form-group" style={{display: "flex", gap: "10px"}}>
+           <input
+            type="text"
+            name="latitude"
+            placeholder="Latitude"
+            className="login-input"
+            value={formData.latitude}
+            readOnly
+          />
+           <input
+            type="text"
+            name="longitude"
+            placeholder="Longitude"
+            className="login-input"
+            value={formData.longitude}
+            readOnly
           />
         </div>
 

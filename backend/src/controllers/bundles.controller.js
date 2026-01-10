@@ -1,6 +1,6 @@
 import pool from '../config/db.js'
 
-const SELECT_QUERY = 'SELECT "bundleId", "sellerId", "buyerId", "paymentMethodId", content, "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", price, "pickupRealTime", image_url FROM bundle'
+const SELECT_QUERY = 'SELECT "bundleId", b."sellerId", "buyerId", "paymentMethodId", content, "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", price, "pickupRealTime", image_url, s.latitude, s.longitude FROM bundle b JOIN seller s ON b."sellerId" = s."sellerId"'
 
 const getBundles = async (req, res) => {
   pool.query(SELECT_QUERY + ' WHERE "reservedTime" is NULL', (error, results) => {
@@ -75,7 +75,7 @@ const getReservedBundles = async (req, res) => {
   const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "reservedTime" IS NOT NULL AND "confirmedTime" IS NULL`, [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE b."${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "reservedTime" IS NOT NULL AND "confirmedTime" IS NULL`, [id], (error, results) => {
     if (error) {
       console.log("getReservedBundles error => ", error)
       return res.status(502).json({message: "Database error"})
@@ -93,7 +93,7 @@ const getConfirmedBundles = async (req, res) => {
   const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "confirmedTime" IS NOT NULL AND "pickupRealTime" IS NULL`, [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE b."${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "confirmedTime" IS NOT NULL AND "pickupRealTime" IS NULL`, [id], (error, results) => {
     if (error) {
       console.log("getConfirmedBundle error => ", error)
       return res.status(502).json({message: "Database error"})
@@ -111,7 +111,7 @@ const getOldBundles = async (req, res) => {
   const type = token.split('/')[0]
   const id = token.split('/')[1]
 
-  pool.query(SELECT_QUERY + ` WHERE "${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "pickupRealTime" IS NOT NULL`, [id], (error, results) => {
+  pool.query(SELECT_QUERY + ` WHERE b."${type == "b" ? "buyerId" : "sellerId"}" = $1 AND "pickupRealTime" IS NOT NULL`, [id], (error, results) => {
     if (error) {
       console.log("getOldBundles error => ", error)
       return res.status(502).json({message: "Database error"})

@@ -43,7 +43,11 @@ const sellerRegister = async (req, res) => {
   
   const rounds = 10 // this number can be changed later as the number of rounds is available in the hash
   
-  const {email, password, name, telephone, country, state, npa, street, street_no} = req.body
+  const {email, password, name, telephone, country, state, city, npa, street, street_no, latitude, longitude} = req.body
+
+  const lat = (latitude === "" || latitude === undefined) ? null : latitude
+  const lon = (longitude === "" || longitude === undefined) ? null : longitude
+
   // TODO: add verification that email is only used once
   var query
   try {
@@ -58,13 +62,13 @@ const sellerRegister = async (req, res) => {
   }
   
   if (!email || !password || !name || !telephone ||
-    !country || !state || !npa || !street || !street_no) {
+    !country || !state || !city || !npa || !street || !street_no) {
     return res.status(400).json({message: "missing arguments"})
   }
   
   const hashPw = bcrypt.hashSync(password, rounds)
   
-  pool.query("INSERT INTO seller(email, password, name, telephone, country, state, npa, street, street_no) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [email, hashPw, name, telephone, country, state, npa, street, street_no], (error, results) => {
+  pool.query("INSERT INTO seller(email, password, name, telephone, country, state, city, npa, street, street_no, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", [email, hashPw, name, telephone, country, state, city, npa, street, street_no, lat, lon], (error, results) => {
     if (error) {
       console.log(error)
       return res.status(502).json({message: "db error"})

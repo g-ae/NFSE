@@ -2,7 +2,7 @@ import pool from '../config/db.js'
 
 // /sellers
 const getSellers = async (req, res) => {
-    pool.query('SELECT "sellerId", name, telephone, street || \' \' || street_no as "address", state, country FROM seller ORDER BY "sellerId";', (error, results) => {
+    pool.query('SELECT "sellerId", name, telephone, street || \' \' || street_no as "address", city, state, country FROM seller ORDER BY "sellerId";', (error, results) => {
         if (error) {
             console.log("Erreur =>", error)
             res.status(502).json({message: "Database error"})
@@ -20,7 +20,7 @@ const getSeller = async (req, res) => {
         return res.status(404).json({})
     }
     
-    pool.query('SELECT "sellerId", name, email, telephone, street || \' \' || street_no as "address", state, npa, country FROM seller WHERE "sellerId" = $1 ORDER BY "sellerId" ;', [id], (error, results) => {
+    pool.query('SELECT "sellerId", name, email, telephone, street || \' \' || street_no as "address", city, state, npa, country FROM seller WHERE "sellerId" = $1 ORDER BY "sellerId" ;', [id], (error, results) => {
         if (error) {
             console.log("Erreur =>", error)
             return res.status(502).json({message: "Database error"})

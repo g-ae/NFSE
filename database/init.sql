@@ -16,10 +16,13 @@ CREATE TABLE "seller" (
   "password" varchar(255) NOT NULL,
   "country" varchar(30) NOT NULL,
   "state" varchar(30) NOT NULL,
+  "city" varchar(50) NOT NULL,
   "npa" varchar(10) NOT NULL,
   "street" varchar(50) NOT NULL,
   "street_no" varchar(10) NOT NULL,
-  "telephone" varchar(20) NOT NULL
+  "telephone" varchar(20) NOT NULL,
+  "latitude" decimal(9,6),
+  "longitude" decimal(9,6)
 );
 
 CREATE TABLE "openinghours" (
@@ -80,11 +83,20 @@ ALTER TABLE "bundle" ADD CONSTRAINT "buyer_bundle" FOREIGN KEY ("buyerId") REFER
 
 ALTER TABLE "bundle" ADD CONSTRAINT "bundle_payment_method" FOREIGN KEY ("paymentMethodId") REFERENCES "payment_method" ("paymentMethodId");
 
-INSERT INTO "seller"("name", "email", "password", "country", "state", "npa", "street", "street_no", "telephone")
-  VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'VS', '1950', 'Avenue de la Planta', '50', '+41272928496');
+INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
+  VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '50', '+41272928496', 46.230554, 7.362947);
+  
+INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone")
+  VALUES('migrolino Sion', 'migrolino@migros.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '22', '+41272928496');
 
+INSERT INTO "buyer"("name", "email", "password", "telephone")
+  VALUES('devs', 'dev@genlog.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', '0790797979');
+  
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
-  VALUES(1, '3 pains au chocolat', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
+  VALUES(1, '3 croissants au jambon', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
 
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
   VALUES(1, 'Panier Surprise', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 14.50);
+  
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
+  VALUES(2, '10 baguettes de pain', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 24.95);

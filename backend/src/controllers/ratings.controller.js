@@ -20,7 +20,7 @@ export const getHasRated = async (req, res) => {
       console.log(error)
       return res.status(502).json({message: "Database error"})
     }
-    if (results.rows.length == 0) return res.status(204).json([])
+    if (results.rows.length == 0) return res.status(200).json([])
     else return res.status(200).json(results.rows)
   })
 }

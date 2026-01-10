@@ -8,7 +8,7 @@ import { getToken, isLoggedIn } from "../services/cookies";
 
 
 
-function BundleCard({bundle}) {
+function BundleCard({bundle, userLocation}) {
     //const {isReserved, addToCart, removeFromCart} = useBundleContext()
     //const incart = isReserved(bundle.bundleId)
     const [accountType, setAccountType] = useState("unknown")
@@ -17,6 +17,27 @@ function BundleCard({bundle}) {
     const [rating, setRating] = useState(0)
     const navigate = useNavigate();
     const icon = bundle.reservedTime ? "❌" : "🛒"
+    
+    // Haversine formula to calculate distance in km
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+      if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+      const R = 6371;
+      const dLat = deg2rad(lat2 - lat1);
+      const dLon = deg2rad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const d = R * c; // Distance in km
+      return d.toFixed(1);
+    }
+
+    const deg2rad = (deg) => {
+      return deg * (Math.PI / 180)
+    }
+
+    const distance = userLocation ? calculateDistance(userLocation.latitude, userLocation.longitude, bundle.latitude, bundle.longitude) : null;
     
     useEffect(() => {
       const fetchData = async () => {
@@ -114,28 +135,36 @@ function BundleCard({bundle}) {
                 )}
             </div>
             <div className="bundle-info">
-                <h3>{bundle.content}</h3>
-                {!bundle.pickupRealTime && <p>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</p>}
-                {bundle.pickupRealTime && `Picked up at ${formatDateTime(bundle.pickupRealTime)}`}
-                {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
-                {bundle.pickupRealTime && !isRated && (
-                    !showRating ? (
-                        <button onClick={onRateButtonClicked}>Rate { accountType == "Buyer" ? "seller" : "buyer" }</button>
-                    ) : (
-                        <div className="rating-container" onClick={(e) => e.stopPropagation()}>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <button 
-                                    key={star}
-                                    className={`star-btn ${star <= rating ? "active" : ""}`}
-                                    onClick={() => setRating(star)}
-                                >
-                                    ★
-                                </button>
-                            ))}
-                            <button className="rating-submit" onClick={submitRating} disabled={rating === 0}>Send</button>
-                        </div>
-                    )
-                )}
+                <div className="bundle-info-top">
+                    <h3>{bundle.content}</h3>
+                </div>
+                <div className="bundle-info-bottom">
+                    <p>
+                        {distance && <span className="bundle-distance" style={{marginRight: '8px'}}>📍 {distance} km</span>}
+                        {distance && !bundle.pickupRealTime && <span style={{marginRight: '8px'}}>|</span>}
+                        {!bundle.pickupRealTime && <span>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</span>}
+                    </p>
+                    {bundle.pickupRealTime && `Picked up at ${formatDateTime(bundle.pickupRealTime)}`}
+                    {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
+                    {bundle.pickupRealTime && !isRated && (
+                        !showRating ? (
+                            <button onClick={onRateButtonClicked}>Rate { accountType == "Buyer" ? "seller" : "buyer" }</button>
+                        ) : (
+                            <div className="rating-container" onClick={(e) => e.stopPropagation()}>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button 
+                                        key={star}
+                                        className={`star-btn ${star <= rating ? "active" : ""}`}
+                                        onClick={() => setRating(star)}
+                                    >
+                                        ★
+                                    </button>
+                                ))}
+                                <button className="rating-submit" onClick={submitRating} disabled={rating === 0}>Send</button>
+                            </div>
+                        )
+                    )}
+                </div>
             </div>
         </div>
     )

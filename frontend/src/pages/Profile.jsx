@@ -110,11 +110,11 @@ function Profile() {
                 <hr className="profile-divider" />
                 <div className="profile-item">
                     <strong className="profile-label">Address:</strong> 
-                    <span className="profile-value">{userData.address}, {userData.npa}</span>
+                    <span className="profile-value">{userData.address}</span>
                 </div>
                 <div className="profile-item">
-                    <strong className="profile-label">State:</strong> 
-              <span className="profile-value">{userData.state}</span>
+                    <strong className="profile-label">City:</strong> 
+                    <span className="profile-value">{userData.npa} {userData.state}</span>
                 </div>
                 <div className="profile-item">
                     <strong className="profile-label">Country:</strong> 

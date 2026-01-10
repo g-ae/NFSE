@@ -178,7 +178,20 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.bundle-info-top {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
+}
+
+.bundle-info-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
 }
 
 .bundle-info h3 {

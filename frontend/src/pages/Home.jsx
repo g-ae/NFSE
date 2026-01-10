@@ -15,9 +15,53 @@ function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [accountType, setAccountType] = useState("unknown")
-  
+  const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
+    const getLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+            setUserLocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            });
+            },
+            async (error) => {
+            console.log("Error getting browser location:", error);
+            // Fallback to IP Geolocation
+            try {
+                const response = await fetch("https://ipwho.is/");
+                const data = await response.json();
+                if (data.latitude && data.longitude) {
+                setUserLocation({
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                });
+                console.log("Using IP-based location.");
+                }
+            } catch (ipErr) {
+                console.log("Error getting IP location:", ipErr);
+            }
+            }
+          );
+        } else {
+          // Fallback if geolocation not supported
+          fetch("https://ipwho.is/")
+            .then(res => res.json())
+            .then(data => {
+              if (data.latitude && data.longitude) {
+                setUserLocation({
+                  latitude: data.latitude,
+                  longitude: data.longitude,
+                });
+              }
+            })
+            .catch(err => console.log(err));
+        }
+    }
+    getLocation();
+
     const loadPopularBundles = async () => {
       try { 
         const popularBundles = await getPopularBundles();
@@ -75,7 +119,7 @@ function Home() {
     }
   };
 
-  function SellersHome() {
+  function SellersHome({ userLocation }) {
     function Sgrid({ title, bundlesref, className }) {
       return (
         <div className={`bundle-grid ${className || ""}`}>
@@ -85,7 +129,7 @@ function Home() {
             <p className="empty-grid">No bundles yet</p>
           ) : (
             bundlesref.map((bundle) => (
-              <BundleCard bundle={bundle} key={bundle.bundleId} />
+              <BundleCard bundle={bundle} key={bundle.bundleId} userLocation={userLocation} />
             ))
           )}
         </div>
@@ -101,11 +145,11 @@ function Home() {
   }
 
 
-  function BuyersHome() {
+  function BuyersHome({ userLocation }) {
     return (
       <div className="bundle-grid">
             {(bundles.length == 0) ? "No bundles available" : bundles.map((bundle) => (
-              <BundleCard bundle={bundle} key={bundle.bundleId} />
+              <BundleCard bundle={bundle} key={bundle.bundleId} userLocation={userLocation} />
             ))}
       </div>  
     )
@@ -132,7 +176,7 @@ function Home() {
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
-        accountType === "Seller" ? <SellersHome /> : <BuyersHome />
+        accountType === "Seller" ? <SellersHome userLocation={userLocation} /> : <BuyersHome userLocation={userLocation} />
       )}
     </div>
   );
