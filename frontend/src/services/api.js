@@ -12,9 +12,27 @@ export const getPopularBundles = async () => {
 };
 
 export const searchBundles = async (query) => {
-  const response = await fetch(`${BASE_URL}/bundles`);
-  const data = await response.json();
-  return data;
+  const q = (query ?? "").trim().toLowerCase();
+  const [bundlesRes, sellersRes] = await Promise.all([
+    fetch(`${BASE_URL}/bundles`),
+    fetch(`${BASE_URL}/sellers`)
+  ]);
+  
+  const [bundles, sellers] = await Promise.all([
+    bundlesRes.json(),
+    sellersRes.json()
+  ]);
+
+  const filteredSellers = sellers.filter(seller => {
+    const city = (seller.city ?? "").trim().toLowerCase();
+    return city.startsWith(q);
+  });
+  
+  const sellersIds = new Set(filteredSellers.map(seller => seller.sellerId));
+
+  return bundles.filter(bundle => {
+    return sellersIds.has(bundle.sellerId);
+  });
 };
 
 async function login(accountType, query) {
