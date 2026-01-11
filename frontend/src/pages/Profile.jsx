@@ -114,7 +114,11 @@ function Profile() {
                 </div>
                 <div className="profile-item">
                     <strong className="profile-label">City:</strong> 
-                    <span className="profile-value">{userData.npa} {userData.state}</span>
+                    <span className="profile-value">{userData.npa} {userData.city}</span>
+                </div>
+                <div className="profile-item">
+                    <strong className="profile-label">State:</strong> 
+                    <span className="profile-value">{userData.state}</span>
                 </div>
                 <div className="profile-item">
                     <strong className="profile-label">Country:</strong> 
