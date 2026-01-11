@@ -14,7 +14,6 @@ function BundleCard({bundle, userLocation}) {
     const [rating, setRating] = useState(0)
     const navigate = useNavigate();
     const icon = bundle.reservedTime ? "❌" : "🛒"
-    const [address, setAddress] = useState("")
     
     // Haversine formula to calculate distance in km
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -65,7 +64,7 @@ function BundleCard({bundle, userLocation}) {
             const seller = await getSeller(sellerId); 
             if (!cancelled) setS(seller);
             })();
-            return () => { cancelled = true; };
+            return () => { cancelled = true };
         }, [sellerId]);
 
         if (!s) return null;

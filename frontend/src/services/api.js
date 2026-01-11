@@ -202,6 +202,8 @@ export const createBundle = async (bundleData) => {
   const headers = new Headers()
   headers.append('Authorization', `Bearer ${token}`)
   headers.append('Content-Type', 'application/json')
+
+  alert("body: " + JSON.stringify(bundleData))
   
   const res = await fetch(`${BASE_URL}/bundles/new`, {
     method: 'POST',

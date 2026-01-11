@@ -11,6 +11,12 @@ function NewBundle() {
     return now.toISOString().slice(0, 16);
   };
 
+  const getDefaultDateTimePlus30 = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 30 - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  }
+
   useEffect(() => {
     const token = getToken();
     if (!token) {
@@ -27,7 +33,8 @@ function NewBundle() {
     content: "",
     price: "",
     pickupStartTime: getDefaultDateTime(),
-    pickupEndTime: getDefaultDateTime()
+    pickupEndTime: getDefaultDateTimePlus30(),
+    image_url: ""
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -116,6 +123,18 @@ function NewBundle() {
             value={formData.pickupEndTime}
             onChange={handleChange}
             required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">(optional) Image URL</label>
+          <input
+            type="text"
+            name="image_url"
+            placeholder="https://example.com/image.jpg"
+            className="login-input"
+            value={formData.image_url}
+            onChange={handleChange}
           />
         </div>
 

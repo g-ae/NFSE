@@ -37,7 +37,9 @@ const newBundle = async (req, res) => {
   
   const id = token.split('/')[1]
 
-  const {content, pickupStartTime, pickupEndTime, price} = req.body
+  const {content, pickupStartTime, pickupEndTime, price, image_url} = req.body
+
+  console.log("newBundle body => ", req.body)
   
   if (Date.parse(pickupEndTime) - Date.parse(pickupStartTime) < 30*1000*60) {
     // if less than 30 mins in pickup time, error
@@ -55,7 +57,7 @@ const newBundle = async (req, res) => {
   
   if (!content || !pickupStartTime || !pickupEndTime || !price) return res.status(400).json({message: "missing data"})
   
-  pool.query("INSERT INTO bundle(\"sellerId\", \"content\", \"pickupStartTime\", \"pickupEndTime\", price) VALUES($1, $2, $3, $4, $5)", [id, content, pickupStartTime, pickupEndTime, pricef], (error, results) => {
+  pool.query("INSERT INTO bundle(\"sellerId\", \"content\", \"pickupStartTime\", \"pickupEndTime\", price, \"image_url\") VALUES($1, $2, $3, $4, $5, $6)", [id, content, pickupStartTime, pickupEndTime, pricef, image_url], (error, results) => {
     if (error) {
       if (error.code == '23503') return res.status(401).json({message: "authorization is required"})
       console.log(error)
