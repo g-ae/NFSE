@@ -14,9 +14,11 @@ app.on("error", (error) => {
   console.log("Erreur => ", error)
 })
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
-})
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+  })
+}
 
 // route implementation
 import buyerRoute from './routes/buyers.route.js'
@@ -33,12 +35,14 @@ app.use("/account", accountRoute)
 app.use("/ratings", ratingsRoute)
 
 // Cleanup task: Unreserve bundles held for > 15 mins without confirmation
-setInterval(async () => {
-  try {
-    await pool.query("UPDATE \"bundle\" SET \"reservedTime\" = NULL, \"buyerId\" = NULL WHERE \"reservedTime\" < NOW() - INTERVAL '15 minutes' AND \"confirmedTime\" IS NULL;");
-  } catch (err) {
-    console.error("Error cleaning up expired bundles:", err);
-  }
-}, 60 * 1000);
+if (process.env.NODE_ENV !== 'test') {
+  setInterval(async () => {
+    try {
+      await pool.query("UPDATE \"bundle\" SET \"reservedTime\" = NULL, \"buyerId\" = NULL WHERE \"reservedTime\" < NOW() - INTERVAL '15 minutes' AND \"confirmedTime\" IS NULL;");
+    } catch (err) {
+      console.error("Error cleaning up expired bundles:", err);
+    }
+  }, 60 * 1000);
+}
 
 export default app;
