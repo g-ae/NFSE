@@ -28,7 +28,7 @@ function OrderHistory() {
       } catch (error) {
         console.error("Failed to fetch history:", error);
       } finally {
-        // Set loading to false to say fetching is done.
+        // Set loading to false to indicate fetching is done.
         setLoading(false);
       }
     };
