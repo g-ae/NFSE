@@ -17,6 +17,10 @@ import QrScanner from "./pages/QrScanner";
 import ScanConfirmation from "./pages/Confirmation";
 import ShareBundle from "./pages/ShareBundle";
 
+/**
+ * Main application component.
+ * @returns {JSX.Element} The rendered application.
+ */
 function App() {
   return (
     <BundleProvider>
