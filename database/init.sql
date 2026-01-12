@@ -83,20 +83,54 @@ ALTER TABLE "bundle" ADD CONSTRAINT "buyer_bundle" FOREIGN KEY ("buyerId") REFER
 
 ALTER TABLE "bundle" ADD CONSTRAINT "bundle_payment_method" FOREIGN KEY ("paymentMethodId") REFERENCES "payment_method" ("paymentMethodId");
 
+-- Mock Data
+
+-- Sellers
 INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
   VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '50', '+41272928496', 46.230554, 7.362947);
   
-INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone")
-  VALUES('migrolino Sion', 'migrolino@migros.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '22', '+41272928496');
+INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
+  VALUES('migrolino Sion', 'migrolino@migros.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '22', '+41272928496', 46.2312, 7.3615);
 
+INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
+  VALUES('Manor Sion', 'info@manor.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place du Midi', '10', '+41273272611', 46.2323, 7.3592);
+
+INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
+  VALUES('Boulangerie Zenhäusern', 'contact@zenhausern.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place de la Gare', '2', '+41273223123', 46.2291, 7.3598);
+
+-- Buyers
 INSERT INTO "buyer"("name", "email", "password", "telephone")
   VALUES('devs', 'dev@genlog.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', '0790797979');
-  
+INSERT INTO "buyer"("name", "email", "password", "telephone")
+  VALUES('Alice Smith', 'alice@example.com', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', '0781234567');
+INSERT INTO "buyer"("name", "email", "password", "telephone", "charity")
+  VALUES('Caritas Sion', 'sion@caritas.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', '0273233535', true);
+
+-- Bundles
+-- Unreserved
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
-  VALUES(1, '3 croissants au jambon', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
+  VALUES(1, '3 croissants au jambon', '2026-01-12 18:00:00', '2026-01-12 20:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
 
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
-  VALUES(1, 'Panier Surprise', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 14.50);
-  
+  VALUES(1, 'Panier Surprise Fruits & Légumes', '2026-01-12 18:00:00', '2026-01-12 20:00:00', 12.00);
+
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
-  VALUES(2, '10 baguettes de pain', '2025-12-17 20:00:00', '2025-12-17 23:00:00', 24.95);
+  VALUES(2, 'Sandwiches variés x4', '2026-01-12 20:00:00', '2026-01-12 22:00:00', 15.00);
+
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
+  VALUES(4, 'Lot de pâtisseries du jour', '2026-01-12 17:30:00', '2026-01-12 18:30:00', 8.50);
+
+
+-- Confirmed/Completed
+INSERT INTO "bundle"("sellerId", "buyerId", "paymentMethodId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price")
+  VALUES(4, 2, 3, '2 pains de seigle', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00);
+
+INSERT INTO "bundle"("sellerId", "buyerId", "paymentMethodId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "price")
+  VALUES(3, 1, 1, 'Panier Gourmet Manor', '2026-01-12 18:30:00', '2026-01-12 19:30:00', '2026-01-12 10:00:00', '2026-01-12 19:02:23', 25.00);
+
+-- Feedback
+INSERT INTO "buyer_feedback"("sellerId", "buyerId", "stars") VALUES (4, 2, 5);
+INSERT INTO "buyer_feedback"("sellerId", "buyerId", "stars") VALUES (1, 1, 4);
+
+INSERT INTO "seller_feedback"("sellerId", "buyerId", "stars") VALUES (4, 2, 5);
+INSERT INTO "seller_feedback"("sellerId", "buyerId", "stars") VALUES (3, 1, 3);

@@ -13,6 +13,17 @@ This will create all necessary containers and will run them all in the backgroun
 ### You're set
 When all containers are built and created, your site will be available at `localhost:3000`.
 
+Default users are available at first if you want to test out the app. Example :
+```
+Buyers :
+    - dev@genlog.ch | password
+    - alice@example.com | password
+Sellers :
+    - city@coop.ch | password
+    - migrolino@migros.ch | password
+```
+These sellers have a few bundles ready for reservations.
+
 ## Development
 ### Start only one container
 If you wish to start only one of the containers in prod, you can do so by doing :
@@ -36,3 +47,10 @@ make dev-backend    # starts postgres and backend in dev (ports are open)
 ## API Schema
 First of all, to use the API correctly, you must use the right IP. After running it in either prod or dev, it should be located at `localhost:4000`.
 You can check the API's documentation on `backend/docs/API_DOCUMENTATION.md`.
+
+### API Testing
+You can run tests inside the `backend` folder with :
+
+```bash
+npm run test
+```
