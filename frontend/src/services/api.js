@@ -12,9 +12,27 @@ export const getPopularBundles = async () => {
 };
 
 export const searchBundles = async (query) => {
-  const response = await fetch(`${BASE_URL}/bundles`);
-  const data = await response.json();
-  return data;
+  const q = (query ?? "").trim().toLowerCase();
+  const [bundlesRes, sellersRes] = await Promise.all([
+    fetch(`${BASE_URL}/bundles`),
+    fetch(`${BASE_URL}/sellers`)
+  ]);
+  
+  const [bundles, sellers] = await Promise.all([
+    bundlesRes.json(),
+    sellersRes.json()
+  ]);
+
+  const filteredSellers = sellers.filter(seller => {
+    const city = (seller.city ?? "").trim().toLowerCase();
+    return city.startsWith(q);
+  });
+  
+  const sellersIds = new Set(filteredSellers.map(seller => seller.sellerId));
+
+  return bundles.filter(bundle => {
+    return sellersIds.has(bundle.sellerId);
+  });
 };
 
 async function login(accountType, query) {
@@ -78,6 +96,12 @@ export const getUser = async (type, id) => {
 
 export const getBuyer = async (id) => {
   return await getUser("buyers", id)
+}
+
+export const getAllBuyers = async () => {
+  const res = await fetch(`${BASE_URL}/buyers`)
+  if (parseInt(res.status / 100) != 2) return null
+  else return await res.json()
 }
 
 export const getSeller = async (id) => {
@@ -296,4 +320,22 @@ export const getSellerRating = async (id) => {
   const res = await fetch(`${BASE_URL}/ratings/seller/${id}`)
   if (parseInt(res.status / 100) != 2) return null
   return await res.json()
+}
+
+export const shareOrder = async ({ newBuyerId, bundleId }) => {
+  const token = getToken()
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+
+  const res = await fetch(`${BASE_URL}/bundles/shareOrder`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({ newBuyerId, bundleId })
+  })
+
+  if (parseInt(res.status / 100) != 2) return false
+  return true
 }

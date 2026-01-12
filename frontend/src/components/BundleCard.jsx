@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../css/BundleCard.css"
-//import { useBundleContext } from "../context/BundleContext"
-import { reserveBundle, unreserveBundle, getIsRatedFrom, postRate } from "../services/api"
+import { reserveBundle, unreserveBundle, getIsRatedFrom, postRate, getSeller } from "../services/api"
 import { useNavigate } from "react-router-dom";
 import { getAccountTypeFromToken } from "../services/utils";
 import { getToken, isLoggedIn } from "../services/cookies";
@@ -9,8 +8,6 @@ import { getToken, isLoggedIn } from "../services/cookies";
 
 
 function BundleCard({bundle, userLocation}) {
-    //const {isReserved, addToCart, removeFromCart} = useBundleContext()
-    //const incart = isReserved(bundle.bundleId)
     const [accountType, setAccountType] = useState("unknown")
     const [isRated, setRated] = useState(false)
     const [showRating, setShowRating] = useState(false)
@@ -57,6 +54,27 @@ function BundleCard({bundle, userLocation}) {
       fetchData();
     }, []);
 
+    function Address({sellerId}) {
+        const [s, setS] = useState(null);
+
+        useEffect(() => {
+            let cancelled = false;
+
+            (async () => {
+            const seller = await getSeller(sellerId); 
+            if (!cancelled) setS(seller);
+            })();
+            return () => { cancelled = true };
+        }, [sellerId]);
+
+        if (!s) return null;
+        return (
+            <div className="bundle-address">
+                <p className="bundle-address-large">{s.country} - {s.state} - {s.npa} - {s.city}</p>
+                <p className="bundle-address-close">{s.address}</p>
+        </div>)
+    }
+
     const formatDateTime = (iso) =>
         new Date(iso).toLocaleString("fr-CH", {
             day: "2-digit",
@@ -65,8 +83,6 @@ function BundleCard({bundle, userLocation}) {
             hour: "2-digit",
             minute: "2-digit",
         });
-    
-    
 
     const onIncartClick = (e) => {
         e.stopPropagation()
@@ -114,6 +130,11 @@ function BundleCard({bundle, userLocation}) {
         )
     }
 
+    const onSharedButtonClicked = async (e) => {
+        e.stopPropagation();
+        navigate("/share", { state: bundle.bundleId });
+    };
+
     return (
         <div className="bundle-card">
             <div className="bundle-poster">
@@ -123,6 +144,13 @@ function BundleCard({bundle, userLocation}) {
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onQrButtonClicked}>
                             Show QR CODE
+                        </button>
+                    </div>
+                )}
+                {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Buyer" && (
+                    <div className="share-btn-wrap">
+                        <button className="share-btn" onClick={onSharedButtonClicked}>
+                            Share Bundle
                         </button>
                     </div>
                 )}
@@ -145,7 +173,8 @@ function BundleCard({bundle, userLocation}) {
                         {!bundle.pickupRealTime && <span>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</span>}
                     </p>
                     {bundle.pickupRealTime && `Picked up at ${formatDateTime(bundle.pickupRealTime)}`}
-                    {bundle.price && <p className="bundle-price">{bundle.price}€</p>}
+                    <Address sellerId={bundle.sellerId}/>
+                    <p className="bundle-price">{bundle.price}€</p>
                     {bundle.pickupRealTime && !isRated && (
                         !showRating ? (
                             <button onClick={onRateButtonClicked}>Rate { accountType == "Buyer" ? "seller" : "buyer" }</button>

@@ -220,6 +220,43 @@ const patchConfirmBundlePickup = async (req, res) => {
   })
 }
 
+const updateCustomerIdOnBundle = async (req, res) => {
+  if (!req.headers.authorization)
+    return res.status(403).json({ message: "authorization is required" });
+
+  const bearer = req.headers.authorization;
+  const token = bearer.split(" ")[1];
+
+  if (!token || token[0] !== "b")
+    return res
+      .status(401)
+      .json({ message: "this action cannot be performed by the specified account" });
+
+  const buyerId = token.split("/")[1];
+  if (!buyerId) return res.status(400).json({ message: "missing buyerId in token" });
+
+  const { newBuyerId, bundleId } = req.body;
+
+  if (!newBuyerId || !bundleId)
+    return res.status(400).json({ message: "missing data" });
+
+  pool.query(
+    `
+    UPDATE bundle
+    SET "buyerId" = $1
+    WHERE "bundleId" = $2`,
+    [newBuyerId, bundleId],
+    (error, results) => {
+      if (error) {
+        if (error.code == '23503') return res.status(400).json({message: "authorization is required"})
+        console.log(error)
+        return res.status(502).json({message: "db error"})
+      }
+      return res.status(200).json()
+    }
+  )
+}
+
 export {
   getBundles,
   getBundle,
@@ -230,5 +267,6 @@ export {
   patchUnreserveBundle,
   patchConfirmBundle,
   getOldBundles,
-  patchConfirmBundlePickup
+  patchConfirmBundlePickup,
+  updateCustomerIdOnBundle
 }

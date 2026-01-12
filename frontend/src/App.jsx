@@ -15,6 +15,7 @@ import NavBar from "./components/NavBar";
 import QrCode from "./pages/QrCode";
 import QrScanner from "./pages/QrScanner";
 import ScanConfirmation from "./pages/Confirmation";
+import ShareBundle from "./pages/ShareBundle";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/qrcode" element={<QrCode />} />
           <Route path="/scan" element={<QrScanner />} />
           <Route path="/scan/confirmation" element={<ScanConfirmation />} />
+          <Route path="/share" element={<ShareBundle />} />
         </Routes>
       </main>
     </BundleProvider>
