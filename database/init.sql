@@ -111,22 +111,25 @@ INSERT INTO "buyer"("name", "email", "password", "telephone", "charity")
 INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
   VALUES(1, '3 croissants au jambon', '2026-01-12 18:00:00', '2026-01-12 20:00:00', 6.70, 'https://api.swissmilk.ch/wp-content/uploads/2019/06/schinkengipfeli-2560x1706.jpg');
 
-INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
-  VALUES(1, 'Panier Surprise Fruits & Légumes', '2026-01-12 18:00:00', '2026-01-12 20:00:00', 12.00);
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
+  VALUES(1, 'Panier Surprise Fruits & Légumes', '2026-01-12 18:00:00', '2026-01-12 20:00:00', 12.00, 'https://www.fleuriste.ca/media/catalog/product/i/m/img_1561.jpg?width=265&height=265&store=francais&image-type=image');
 
-INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
-  VALUES(2, 'Sandwiches variés x4', '2026-01-12 20:00:00', '2026-01-12 22:00:00', 15.00);
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
+  VALUES(2, 'Sandwiches variés x4', '2026-01-12 20:00:00', '2026-01-12 22:00:00', 15.00, 'https://pretatable.ca/cdn/shop/products/SocieteTraiteur_-461.jpg?v=1681948073');
 
-INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price")
-  VALUES(4, 'Lot de pâtisseries du jour', '2026-01-12 17:30:00', '2026-01-12 18:30:00', 8.50);
+INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", "price", "image_url")
+  VALUES(4, 'Lot de pâtisseries du jour', '2026-01-12 17:30:00', '2026-01-12 18:30:00', 8.50, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIS5huzWI-O54vZ-u4BONjESeTvCFbWjgA0Q&s');
 
 
 -- Confirmed/Completed
-INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price")
-  VALUES(4, 2, '2 pains de seigle', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00);
+INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price", "image_url")
+  VALUES(4, 2, '2 pains de seigle', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00, 'https://s3-eu-west-1.amazonaws.com/images-ca-1-0-1-eu/recipe_photos/original/687/pain-de-seigle-recette-AdobeStock_279462084.jpg');
 
-INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "price")
-  VALUES(3, 1, 'Panier Gourmet Manor', '2026-01-12 18:30:00', '2026-01-12 19:30:00', '2026-01-12 10:00:00', '2026-01-12 19:02:23', 25.00);
+INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price", "image_url")
+  VALUES(3, 1, 'Grand Panier Légumes', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00, 'https://www.mimelis.ch/_next/image?url=https%3A%2F%2Fapi.mimelis.ch%2Fassets%2F52ecedca-d859-4d42-86be-ed14821591f8&w=3840&q=85');
+
+INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "price", "image_url")
+  VALUES(3, 1, 'Panier Gourmet Manor', '2026-01-12 18:30:00', '2026-01-12 19:30:00', '2026-01-12 10:00:00', '2026-01-12 19:02:23', 56.00, 'https://cestcela.fr/cdn/shop/collections/nos-paniers-gourmands-186228.jpg?v=1754581382');
 
 -- Feedback
 INSERT INTO "buyer_feedback"("sellerId", "buyerId", "stars") VALUES (4, 2, 5);
