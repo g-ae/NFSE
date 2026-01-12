@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getBundles, getBundle, newBundle, getReservedBundles, getConfirmedBundles, patchReserveBundle, patchUnreserveBundle, patchConfirmBundle, getOldBundles, patchConfirmBundlePickup } from '../controllers/bundles.controller.js'
+import { getBundles, getBundle, newBundle, getReservedBundles, getConfirmedBundles, patchReserveBundle, patchUnreserveBundle, patchConfirmBundle, getOldBundles, patchConfirmBundlePickup, updateCustomerIdOnBundle} from '../controllers/bundles.controller.js'
 
 const router = Router()
 
@@ -11,6 +11,9 @@ router.route("/history").get(getOldBundles)
 
 // add
 router.route("/new").post(newBundle)
+
+//update
+router.route("/shareOrder").patch(updateCustomerIdOnBundle)
 
 // actions
 router.route("/reserve").patch(patchReserveBundle)

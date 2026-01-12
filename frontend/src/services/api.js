@@ -98,6 +98,12 @@ export const getBuyer = async (id) => {
   return await getUser("buyers", id)
 }
 
+export const getAllBuyers = async () => {
+  const res = await fetch(`${BASE_URL}/buyers`)
+  if (parseInt(res.status / 100) != 2) return null
+  else return await res.json()
+}
+
 export const getSeller = async (id) => {
   return await getUser("sellers", id)
 }
@@ -202,8 +208,6 @@ export const createBundle = async (bundleData) => {
   const headers = new Headers()
   headers.append('Authorization', `Bearer ${token}`)
   headers.append('Content-Type', 'application/json')
-
-  alert("body: " + JSON.stringify(bundleData))
   
   const res = await fetch(`${BASE_URL}/bundles/new`, {
     method: 'POST',
@@ -316,4 +320,22 @@ export const getSellerRating = async (id) => {
   const res = await fetch(`${BASE_URL}/ratings/seller/${id}`)
   if (parseInt(res.status / 100) != 2) return null
   return await res.json()
+}
+
+export const shareOrder = async ({ newBuyerId, bundleId }) => {
+  const token = getToken()
+  if (!token) return false
+  
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${token}`)
+  headers.append('Content-Type', 'application/json')
+
+  const res = await fetch(`${BASE_URL}/bundles/shareOrder`, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({ newBuyerId, bundleId })
+  })
+
+  if (parseInt(res.status / 100) != 2) return false
+  return true
 }

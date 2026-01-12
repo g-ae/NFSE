@@ -1,0 +1,101 @@
+.share-bundle-wrapper {
+  min-height: 100vh;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.share-bundle-wrapper h1 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 1.25rem;
+  max-width: 520px;
+  line-height: 1.3;
+}
+
+/* Encadré (card) */
+.share-bundle-form {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Input */
+.share-bundle-form input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #222;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.share-bundle-form input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.share-bundle-form input:focus {
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.5);
+}
+
+/* Bouton */
+.share-bundle-form button {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #e50914;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.share-bundle-form button:hover {
+  background: #f40612;
+  transform: translateY(-1px);
+}
+
+/* Messages d’erreur (réutilisable) */
+.error-message {
+  margin-top: 1rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+
+  color: #ffb3b8;
+  background: rgba(229, 9, 20, 0.15);
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .share-bundle-wrapper h1 {
+    font-size: 1.1rem;
+  }
+
+  .share-bundle-form {
+    padding: 1rem;
+  }
+}

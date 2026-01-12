@@ -130,6 +130,11 @@ function BundleCard({bundle, userLocation}) {
         )
     }
 
+    const onSharedButtonClicked = async (e) => {
+        e.stopPropagation();
+        navigate("/share", { state: bundle.bundleId });
+    };
+
     return (
         <div className="bundle-card">
             <div className="bundle-poster">
@@ -139,6 +144,13 @@ function BundleCard({bundle, userLocation}) {
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onQrButtonClicked}>
                             Show QR CODE
+                        </button>
+                    </div>
+                )}
+                {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Buyer" && (
+                    <div className="share-btn-wrap">
+                        <button className="share-btn" onClick={onSharedButtonClicked}>
+                            Share Bundle
                         </button>
                     </div>
                 )}

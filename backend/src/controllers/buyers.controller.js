@@ -18,6 +18,18 @@ const getBuyer = async (req, res) => {
   })
 }
 
+const getAllBuyers = async (req, res) => {
+  pool.query('SELECT "buyerId", name, email, telephone FROM buyer ORDER BY "buyerId" ;', (error, results) => {
+    if (error) {
+      console.log(error)
+      return res.status(502).json({message: "Database error"})
+    }
+    if (results.rows.length == 0) return res.status(204).json({message: "No buyers found"})
+    return res.status(200).json(results.rows)
+  })
+}
+
 export {
-  getBuyer
+  getBuyer,
+  getAllBuyers
 }
