@@ -20,4 +20,4 @@ dev-db:
 	docker compose -f docker-compose.yml -f dev-compose.yml up -d postgres
 	
 dev-backend:
-	docker compose up -d backend
+	docker compose -f docker-compose.yml -f dev-compose.yml up -d backend

@@ -37,8 +37,8 @@ docker-compose up -d backend
 ```sh
 make                # starts everything in prod
 make stop           # stops all containers
-make delete         # deletes everything
-make reset          # deletes everything and restarts in prod
+make delete-hard    # deletes everything
+make reset-hard     # deletes everything and restarts in prod
 
 make dev            # starts all in development (all ports are open)
 make dev-db         # starts postgres in dev (port 5432 is open)
