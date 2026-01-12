@@ -35,23 +35,4 @@ make dev-backend    # starts postgres and backend in dev (ports are open)
 ```
 ## API Schema
 First of all, to use the API correctly, you must use the right IP. After running it in either prod or dev, it should be located at `localhost:4000`.
-```
-GET "/sellers"                  -> returns all sellers from the db
-GET "/sellers/:id"              -> returns data from a specific seller
-
-GET "/bundles"                  -> return all available bundles from the db
-GET "/bundles/:id"              -> return data from specific bundle
-GET "/bundles/reserved"         -> return all reserved bundles for the user (buyer)
-GET "/bundles/confirmed"        -> return all confirmed bundles for the user (buyer)
-POST "/bundles/new"             -> create new bundle with data from JSON body (needs "authorization: bearer token" header)
-PATCH "/bundles/reserve"        -> reserve a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
-PATCH "/bundles/unreserve"      -> unreserve a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
-PATCH "/bundles/confirm"        -> confirm a bundle as a buyer, needs Authorization header + JSON body with "bundleId".
-PATCH "/bundles/confirmPickup"  -> confirm that a bundle has been picked up by the buyer, needs Authorization header + JSON body with "bundleId".
-
-POST "/account/buyer"           -> login for buyer account (email / password in JSON body as "email" and "password"). password must be SHA-256 encrypted. This will return a token that can be used to rate sellers, buy bundles, etc.
-POST "/account/buyer/register"  -> register a buyer account, all data in JSON body
-
-POST "/account/seller"          -> login for seller account (email / password in json like buyer login) -> returns a token
-POST "/account/seller/register" -> register a seller account, all data in JSON body, needed data: ["email", "password", "name", "telephone", "country", "state", "npa", "street", "street_no"]
-```
+You can check the API's documentation on `backend/docs/API_DOCUMENTATION.md`.
