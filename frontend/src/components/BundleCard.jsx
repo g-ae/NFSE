@@ -70,8 +70,8 @@ function BundleCard({bundle, userLocation}) {
         if (!s) return null;
         return (
             <div className="bundle-address">
-                <p className="bundle-address-large">{s.country} - {s.state} - {s.npa} - {s.city}</p>
-                <p className="bundle-address-close">{s.address}</p>
+                <p className="bundle-address-large">{s.name}</p>
+                <p className="bundle-address-close">{s.address}, {s.npa} {s.city}, {s.state}</p>
         </div>)
     }
 

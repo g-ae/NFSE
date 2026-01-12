@@ -60,6 +60,7 @@ function Cart() {
       alert("An error occurred, please try again later.")
     } else {
       alert("Order confirmed! Total: " + total + " CHF");
+      setCartItems([]);
     }
     setLoading(false)
   };

@@ -122,11 +122,11 @@ INSERT INTO "bundle"("sellerId", "content", "pickupStartTime", "pickupEndTime", 
 
 
 -- Confirmed/Completed
-INSERT INTO "bundle"("sellerId", "buyerId", "paymentMethodId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price")
-  VALUES(4, 2, 3, '2 pains de seigle', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00);
+INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "pickupRealTime", "price")
+  VALUES(4, 2, '2 pains de seigle', '2026-01-11 17:00:00', '2026-01-11 18:30:00', '2026-01-11 09:15:00', '2026-01-11 17:45:00', '2026-01-11 17:45:00', 5.00);
 
-INSERT INTO "bundle"("sellerId", "buyerId", "paymentMethodId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "price")
-  VALUES(3, 1, 1, 'Panier Gourmet Manor', '2026-01-12 18:30:00', '2026-01-12 19:30:00', '2026-01-12 10:00:00', '2026-01-12 19:02:23', 25.00);
+INSERT INTO "bundle"("sellerId", "buyerId", "content", "pickupStartTime", "pickupEndTime", "reservedTime", "confirmedTime", "price")
+  VALUES(3, 1, 'Panier Gourmet Manor', '2026-01-12 18:30:00', '2026-01-12 19:30:00', '2026-01-12 10:00:00', '2026-01-12 19:02:23', 25.00);
 
 -- Feedback
 INSERT INTO "buyer_feedback"("sellerId", "buyerId", "stars") VALUES (4, 2, 5);
