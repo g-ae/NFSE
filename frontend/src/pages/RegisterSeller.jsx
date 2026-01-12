@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import "../css/Login.css";
 import { registerSeller } from "../services/api.js";
 
+/**
+ * Register Seller page allowing new sellers to create an account.
+ * @returns {JSX.Element} Register Seller page component.
+ */
 function RegisterSeller() {
   const navigate = useNavigate();
+
+  // Seller registration informations.
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,6 +27,7 @@ function RegisterSeller() {
   });
   const [error, setError] = useState("");
 
+  // Update data state on input changes.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -29,6 +36,7 @@ function RegisterSeller() {
     }));
   };
 
+  // Register the seller with registerSeller().
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("RegisterSeller handleSubmit called");
@@ -39,9 +47,12 @@ function RegisterSeller() {
       const registerData = await registerSeller(formData);
       console.log("registerSeller returned:", registerData);
       
+      // If registration fails, display registration error message.
       if (!registerData) {
         setError("Registration failed. Please try again.");
       } else {
+
+        // On success, alert and redirect to login page.
         alert("Your have been registered, please log in to use your account.")
         navigate("/login");
       }
@@ -51,11 +62,14 @@ function RegisterSeller() {
     }
   };
 
+  // Render the seller registration form.
   return (
     <div className="login-container">
       <h2 className="login-title">Register as Seller</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="login-form">
+
+        {/* Input fields for name, email, telephone, password, and address (country, state, city, npa, street, street_no). */}
         <div className="form-group">
           <input
             type="text"
@@ -176,12 +190,14 @@ function RegisterSeller() {
           />
         </div>
 
+        {/* Button to get geolocation and fill latitude and longitude fields. */}
         <div className="form-group">
           <button 
             type="button" 
             className="login-button" 
             style={{backgroundColor: "#4CAF50", marginBottom: "1rem"}}
             onClick={() => {
+
               const getLocation = () => {
                 if (navigator.geolocation) {
                    navigator.geolocation.getCurrentPosition((position) => {
@@ -226,6 +242,7 @@ function RegisterSeller() {
           </button>
         </div>
 
+        {/* Readonly fields to display latitude and longitude. */}
         <div className="form-group" style={{display: "flex", gap: "10px"}}>
            <input
             type="text"
@@ -245,6 +262,7 @@ function RegisterSeller() {
           />
         </div>
 
+        {/* Submit button for registration. */}
         <button type="submit" className="login-button">
           Register
         </button>

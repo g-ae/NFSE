@@ -4,19 +4,27 @@ import { createBundle } from "../services/api";
 import { getToken } from "../services/cookies";
 import { getAccountTypeFromToken } from "../services/utils";
 
+/**
+ * New Bundle page for sellers to create a new bundle.
+ * @returns {JSX.Element} New Bundle page component.
+ */
 function NewBundle() {
+
+  // Default start time is current time.
   const getDefaultDateTime = () => {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     return now.toISOString().slice(0, 16);
   };
 
+  // Default end time is 30 minutes after start time.
   const getDefaultDateTimePlus30 = () => {
     const now = new Date();
     now.setMinutes(now.getMinutes() + 30 - now.getTimezoneOffset());
     return now.toISOString().slice(0, 16);
   }
 
+  // Redirect to login if not seller.
   useEffect(() => {
     const token = getToken();
     if (!token) {
@@ -39,6 +47,7 @@ function NewBundle() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // Update form data state on input changes.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -47,6 +56,7 @@ function NewBundle() {
     }));
   };
 
+  // Handle submission to create a new bundle.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -54,6 +64,8 @@ function NewBundle() {
 
     try {
       const result = await createBundle(formData);
+
+      // If creation is successful, display success message and redirect.
       if (result) {
         setSuccess(true);
         setTimeout(() => {
@@ -68,11 +80,17 @@ function NewBundle() {
     }
   };
 
+
+  // Render the new bundle creation form.
   return (
     <div className="login-container">
       <h2 className="login-title">New Bundle</h2>
+
+      {/* Display error or success message */}
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message" style={{color: 'green', marginBottom: '10px'}}>Bundle created successfully! Redirecting...</div>}
+      
+      {/* New Bundle creation with price, pickup times, and image_url (optional) */}
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
           <label className="form-label">Content Description</label>
@@ -138,6 +156,7 @@ function NewBundle() {
           />
         </div>
 
+        {/* Submit button */}
         <button type="submit" className="login-button">
           Create Bundle
         </button>

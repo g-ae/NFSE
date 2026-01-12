@@ -6,7 +6,17 @@ import { getAccountTypeFromToken } from "../services/utils";
 import { getToken, isLoggedIn } from "../services/cookies";
 
 
-
+/**
+ * Renders a bundle card with image, seller address, distance and pickup info,
+ * and contextual actions depending on the current user (buyer/seller):
+ * - Buyer: reserve/unreserve, show QR code, share confirmed bundle
+ * - Seller: scan QR code for confirmed bundle
+ * Also allows rating after pickup if not already rated.
+ * @param {Object} props
+ * @param {Object} props.bundle - Bundle.
+ * @param {{ latitude: number, longitude: number } | null} props.userLocation - User geolocation to compute distance (optional).
+ * @returns {JSX.Element} Bundle card component.
+ */
 function BundleCard({bundle, userLocation}) {
     const [accountType, setAccountType] = useState("unknown")
     const [isRated, setRated] = useState(false)
@@ -26,7 +36,7 @@ function BundleCard({bundle, userLocation}) {
         Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      const d = R * c; // Distance in km
+      const d = R * c;
       return d.toFixed(1);
     }
 
@@ -36,6 +46,7 @@ function BundleCard({bundle, userLocation}) {
 
     const distance = userLocation ? calculateDistance(userLocation.latitude, userLocation.longitude, bundle.latitude, bundle.longitude) : null;
     
+    /*Fetch account type and rated status on component mount.*/
     useEffect(() => {
       const fetchData = async () => {
         let accType = "unknown"
@@ -54,6 +65,7 @@ function BundleCard({bundle, userLocation}) {
       fetchData();
     }, []);
 
+    // Sub-component to display the seller's address.
     function Address({sellerId}) {
         const [s, setS] = useState(null);
 
@@ -75,6 +87,7 @@ function BundleCard({bundle, userLocation}) {
         </div>)
     }
 
+    // Format ISO date string to "dd/mm/yyyy, hh:mm" in fr-CH locale.
     const formatDateTime = (iso) =>
         new Date(iso).toLocaleString("fr-CH", {
             day: "2-digit",
@@ -83,7 +96,8 @@ function BundleCard({bundle, userLocation}) {
             hour: "2-digit",
             minute: "2-digit",
         });
-
+    
+    // Handle click on cart button to reserve or unreserve bundle.
     const onIncartClick = (e) => {
         e.stopPropagation()
         if (!bundle.reservedTime) {
@@ -97,22 +111,25 @@ function BundleCard({bundle, userLocation}) {
         }
     }
 
-    
+    // Handle click on QR button to navigate to QR code display page.
     const onQrButtonClicked = (e) => {
         e.stopPropagation();
         navigate("/qrcode", { state: bundle.bundleId });
     }
 
+    // Handle click on scanner button to navigate to QR code scanning page.
     const onScannerButtonClicked = (e) => {
         e.stopPropagation();
         navigate("/scan", { state : bundle.bundleId});
     }
     
+    // Handle click on rate button to show rating options.
     const onRateButtonClicked = (e) => {
       e.stopPropagation()
       setShowRating(true)
     }
 
+    // Submit the rating.
     const submitRating = async (e) => {
         e.stopPropagation()
         setRated(true)
@@ -120,6 +137,7 @@ function BundleCard({bundle, userLocation}) {
         setShowRating(false)
     }
 
+    // Sub-component to display the cart button only if the order is not confirmed.
     function CartButton() {
         return (
             <div className="bundle-overlay">
@@ -130,16 +148,23 @@ function BundleCard({bundle, userLocation}) {
         )
     }
 
+    // Handle click on share button to navigate to share page.
     const onSharedButtonClicked = async (e) => {
         e.stopPropagation();
         navigate("/share", { state: bundle.bundleId });
     };
 
+    // Render the bundle card with all its details and actions.
     return (
         <div className="bundle-card">
             <div className="bundle-poster">
+                {/* Display the bundle image */}
                 <img src={bundle.image_url} alt={`Image non existante pour ${bundle.content}`}/>
+
+                {/* Display cart button for buyers */}
                 {accountType === "Buyer" && <CartButton />}
+
+                {/* Display QR and share buttons for buyers if the order is confirmed */}
                 {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Buyer" && (
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onQrButtonClicked}>
@@ -154,6 +179,7 @@ function BundleCard({bundle, userLocation}) {
                         </button>
                     </div>
                 )}
+                {/* Display scanner button for sellers if the order is confirmed */}
                 {bundle.confirmedTime && !bundle.pickupRealTime && accountType === "Seller" && (
                     <div className="qr-btn-wrap">
                         <button className="qr-btn" onClick={onScannerButtonClicked}>
@@ -162,17 +188,22 @@ function BundleCard({bundle, userLocation}) {
                     </div>
                 )}
             </div>
+            {/* Bundle informations */}
             <div className="bundle-info">
                 <div className="bundle-info-top">
                     <h3>{bundle.content}</h3>
                 </div>
                 <div className="bundle-info-bottom">
+
+                    {/* Display distance and pickup times */}
                     <p>
                         {distance && <span className="bundle-distance" style={{marginRight: '8px'}}>📍 {distance} km</span>}
                         {distance && !bundle.pickupRealTime && <span style={{marginRight: '8px'}}>|</span>}
                         {!bundle.pickupRealTime && <span>{formatDateTime(bundle.pickupStartTime)} - {formatDateTime(bundle.pickupEndTime)}</span>}
                     </p>
                     {bundle.pickupRealTime && `Picked up at ${formatDateTime(bundle.pickupRealTime)}`}
+
+                    {/* Display address, price and rating options */}
                     <Address sellerId={bundle.sellerId}/>
                     <p className="bundle-price">{bundle.price}€</p>
                     {bundle.pickupRealTime && !isRated && (

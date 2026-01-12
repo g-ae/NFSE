@@ -5,11 +5,16 @@ import BundleCard from "../components/BundleCard";
 import { isLoggedIn } from "../services/cookies";
 import { getOldBundles } from '../services/api.js'
 
+/**
+ * Order History page displaying a list of past orders.
+ * @returns {JSX.Element} Order History page component.
+ */
 function OrderHistory() {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch old bundles when loading the Order History page.  
   useEffect(() => {
     if (!isLoggedIn()) {
       navigate("/login");
@@ -23,6 +28,7 @@ function OrderHistory() {
       } catch (error) {
         console.error("Failed to fetch history:", error);
       } finally {
+        // Set loading to false to say fetching is done.
         setLoading(false);
       }
     };
@@ -32,10 +38,12 @@ function OrderHistory() {
 
   if (!isLoggedIn()) return null;
   
+  // Display Loading message while fetching history.
   if (loading) {
     return <div className="cart-loading"><h2>Loading history...</h2></div>;
   }
 
+  // If no history found, display no history found message.
   if (history.length === 0) {
     return (
     <div className="cart-empty">
@@ -45,6 +53,7 @@ function OrderHistory() {
     )
   }
 
+  // Display the list of past orders.
   return (
       <div className="incart">
         <div className="cart-header">

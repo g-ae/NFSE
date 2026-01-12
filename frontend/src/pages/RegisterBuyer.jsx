@@ -2,7 +2,13 @@ import { useState } from "react";
 import "../css/Login.css";
 import { registerBuyer } from '../services/api.js'
 
+/**
+ * Register Buyer page allowing new buyers to create an account.
+ * @returns {JSX.Element} Register Buyer page component.
+ */
 function RegisterBuyer() {
+
+  // Buyer registration informations.
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,6 +17,7 @@ function RegisterBuyer() {
   });
   const [error, setError] = useState("");
 
+  // Update data state on input changes.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -19,6 +26,7 @@ function RegisterBuyer() {
     }));
   };
 
+  // Register the buyer with registerBuyer().
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -26,9 +34,12 @@ function RegisterBuyer() {
     try {
       const registerData = await registerBuyer(formData);
       
+      // If registration fails, display registration error message.
       if (!registerData) {
         setError("Registration failed. Please try again.");
       } else {
+
+        // On success, alert and redirect to login page.
         alert("Your have been registered, please log in to use your account.")
         window.location.href = "/login";
       }
@@ -38,11 +49,14 @@ function RegisterBuyer() {
     }
   };
 
+  // Render the buyer registration form.
   return (
     <div className="login-container">
       <h2 className="login-title">Register as Buyer</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="login-form">
+
+        {/* Input fields for name, email, telephone, and password. */}
         <div className="form-group">
           <input
             type="text"
@@ -91,6 +105,7 @@ function RegisterBuyer() {
           />
         </div>
 
+        {/* Submit button for registration. */}
         <button type="submit" className="login-button">
           Register
         </button>
