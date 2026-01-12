@@ -1,4 +1,4 @@
-.PHONY: start delete-hard reset-hard dev
+.PHONY: start delete-hard reset-hard dev test
 
 start:
 	docker compose up -d --build
@@ -21,3 +21,8 @@ dev-db:
 	
 dev-backend:
 	docker compose -f docker-compose.yml -f dev-compose.yml up -d backend
+
+test:
+	cd backend && npm test
+	cd frontend && npm test -- run
+	@echo "✅ Tests OK."

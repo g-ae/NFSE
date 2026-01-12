@@ -43,14 +43,16 @@ make reset-hard     # deletes everything and restarts in prod
 make dev            # starts all in development (all ports are open)
 make dev-db         # starts postgres in dev (port 5432 is open)
 make dev-backend    # starts postgres and backend in dev (ports are open)
+make test           # runs all tests
 ```
 ## API Schema
 First of all, to use the API correctly, you must use the right IP. After running it in either prod or dev, it should be located at `localhost:4000`.
 You can check the API's documentation on `backend/docs/API_DOCUMENTATION.md`.
 
-### API Testing
-You can run tests inside the `backend` folder with :
-
-```bash
+## Testing
+You can run all tests using `make tests` in the root folder.
+Otherwise, if you want to test only frontend or backend, you can navigate to its folder and `npm run test`. Example :
+```
+cd backend
 npm run test
 ```
