@@ -2,6 +2,7 @@
 
 start:
 	docker compose up -d --build
+	@echo "✅ Server ready -> https://localhost:3000"
 
 stop:
 	docker compose down
