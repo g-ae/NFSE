@@ -26,7 +26,7 @@ function Home() {
 
     // Function to get user location.
     const getLocation = () => {
-        if (!isLoggedIn() || getAccountTypeFromToken(getToken()) != "Buyer") return
+        if (isLoggedIn() && getAccountTypeFromToken(getToken()) != "Buyer") return
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
