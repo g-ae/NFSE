@@ -87,16 +87,16 @@ ALTER TABLE "bundle" ADD CONSTRAINT "bundle_payment_method" FOREIGN KEY ("paymen
 
 -- Sellers
 INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
-  VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '50', '+41272928496', 46.230554, 7.362947);
+  VALUES('Coop City', 'city@coop.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '50', '+41272928496', 46.2262, 7.3607);
   
 INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
-  VALUES('migrolino Sion', 'migrolino@migros.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '22', '+41272928496', 46.2312, 7.3615);
+  VALUES('migrolino Sion', 'migrolino@migros.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Avenue de la Planta', '22', '+41272928496', 46.224399, 7.301451);
 
 INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
-  VALUES('Manor Sion', 'info@manor.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place du Midi', '10', '+41273272611', 46.2323, 7.3592);
+  VALUES('Manor Sion', 'info@manor.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place du Midi', '10', '+41273272611', 46.2309, 7.3588);
 
 INSERT INTO "seller"("name", "email", "password", "country", "state", "city", "npa", "street", "street_no", "telephone", "latitude", "longitude")
-  VALUES('Boulangerie Zenhäusern', 'contact@zenhausern.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place de la Gare', '2', '+41273223123', 46.2291, 7.3598);
+  VALUES('Boulangerie Zenhäusern', 'contact@zenhausern.ch', '$2b$10$UAz4xfmMBHCmATgxBbVccOPyDqp8LSWHzRUY3jG0f8m2bkbsyCZti', 'CH', 'Valais', 'Sion', '1950', 'Place de la Gare', '2', '+41273223123', 46.23192, 7.361842);
 
 -- Buyers
 INSERT INTO "buyer"("name", "email", "password", "telephone")
