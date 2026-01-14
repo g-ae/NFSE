@@ -97,15 +97,18 @@
 
 /* Couleurs spécifiques par état */
 .pop-grid .grid-title {
-  border-left-color: #3498db; /* bleu */
+  border-left-color: #3498db;
+  /* bleu */
 }
 
 .res-grid .grid-title {
-  border-left-color: #f1c40f; /* jaune */
+  border-left-color: #f1c40f;
+  /* jaune */
 }
 
 .con-grid .grid-title {
-  border-left-color: #2ecc71; /* vert */
+  border-left-color: #2ecc71;
+  /* vert */
 }
 
 /* Responsive */

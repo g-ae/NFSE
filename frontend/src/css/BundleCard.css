@@ -15,11 +15,16 @@
 
 .bundle-poster {
   position: relative;
-  aspect-ratio: 5/2;
   width: 100%;
+  height: 0;
+  padding-bottom: 40%;
+  /* 2/5 = 40% ratio */
 }
 
 .bundle-poster img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -31,11 +36,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.8)
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.8));
   opacity: 0;
   transition: opacity 0.2s;
   display: flex;
@@ -97,7 +100,7 @@
 }
 
 .qr-btn:active {
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.18) inset;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18) inset;
 }
 
 .cart-btn {
@@ -212,7 +215,7 @@
   margin-top: 0.2rem;
 }
 
-.bundle-address .bundle-address-large{
+.bundle-address .bundle-address-large {
   font-style: normal;
   color: #bdbdbd;
   font-size: 0.88rem;
@@ -226,7 +229,7 @@
   text-overflow: ellipsis;
 }
 
-.bundle-address .bundle-address-close{
+.bundle-address .bundle-address-close {
   font-style: normal;
   color: #9a9a9a;
   font-size: 0.82rem;
@@ -308,5 +311,5 @@
 }
 
 .share-btn:active {
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.18) inset;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18) inset;
 }
